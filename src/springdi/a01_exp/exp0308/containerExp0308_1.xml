@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd     
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/websocket
+		http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+
+		<bean id="no19" class="springdi.z01_vo.Player">
+			<constructor-arg value="고우석"/>
+			<constructor-arg value="19"/>
+		</bean>
+		<bean id="no22" class="springdi.z01_vo.Player">
+			<constructor-arg value="김현수"/>
+			<constructor-arg value="22"/>
+		</bean>
+		<bean id="no33" class="springdi.z01_vo.Player">
+			<constructor-arg value="박용택"/>
+			<constructor-arg value="33"/>
+		</bean>
+		<bean id="no44" class="springdi.z01_vo.Player">
+			<constructor-arg value="라모스"/>
+			<constructor-arg value="44"/>
+		</bean>
+		<bean id="bTeam" class="springdi.z01_vo.Team">
+			<constructor-arg value="LG트윈스" />
+			<property name="pList">
+				<list>
+					<ref bean="no19"/>
+					<ref bean="no22"/>
+					<ref bean="no33"/>
+					<ref bean="no44"/>
+				</list>
+			</property>
+		</bean>
+
+</beans>      

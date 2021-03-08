@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd     
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/websocket
+		http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+		<bean id="b1" class="springdi.z01_vo.Book">
+			<constructor-arg value="삼국지"/>
+			<constructor-arg value="13000"/>
+			<constructor-arg value="홍길동"/>
+			<constructor-arg value="쌍용컴퍼니"/>
+		</bean>
+
+<!-- 			<property name="title" value="삼국지"></property> -->
+<!-- 			<property name="price" value="12000"></property> -->
+<!-- 			<property name="writer" value="홍길동"></property> -->
+<!-- 			<property name="publisher" value="쌍용"></property> -->
+			
+			
+			
+		 <bean id="p001" class="springdi.z01_vo.Compart">
+		 	<constructor-arg value="CPU"/>
+		 	<constructor-arg value="3.4GHz"/>
+		 </bean>
+		 <bean id="p002" class="springdi.z01_vo.Compart">
+		 	<constructor-arg value="RAM"/>
+		 	<constructor-arg value="16GB"/>
+		 </bean>
+		 <bean id="p003" class="springdi.z01_vo.Compart">
+		 	<constructor-arg value="SSD"/>
+		 	<constructor-arg value="256G"/>
+		 </bean>
+		 <bean id="com" class="springdi.z01_vo.Computer1">
+		 	<constructor-arg value="삼성전자"/>
+		 	<property name="part" ref="p001"/>
+		 </bean>
+		 
+		 <!-- 
+		 다중의 ArrayList형태의 객체를 담을 때 처리 형태
+		  -->
+		 
+		 <bean id="comM" class="springdi.z01_vo.Computer1">
+		 	<constructor-arg value="조립컴퓨터"/>
+		 	<property name="partList">
+		 		<list>
+		 			<ref bean="p002"/>
+		 			<ref bean="p003"/>
+		 			<ref bean="p001"/>
+		 		</list>
+		 	</property>
+		 </bean>
+
+</beans>      

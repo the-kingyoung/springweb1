@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd     
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/websocket
+		http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+		
+	<bean id="exp2" class="springdi.z01_vo.Exp0308">
+		<property name="list">
+			<list>
+				<value>예제1번</value>
+				<value>예제2번</value>
+				<value>예제3번</value>
+			</list>
+		</property>
+		
+		<!-- 동일한 이름이 있으면 하나만 출력이 된다. -->
+		<property name="sets">
+			<set value-type="java.lang.String">
+				<value>예제1</value>
+				<value>예제1</value>
+				<value>예제2</value>
+				<value>예제3</value>
+			</set>
+		</property>
+		
+		<property name="props">
+			<props>
+				<prop key="1">정답</prop>
+				<prop key="2">오답</prop>
+			</props>
+		</property>
+		<property name="maps">
+			<map>
+				<entry key="예제1번" value="X"></entry>
+				<entry key="예제2번" value="O"></entry>
+				<entry key="예제3번" value="O"></entry>
+				<entry key="예제1번" value="O"></entry>
+			</map>
+		</property>
+	</bean>
+</beans>      
