@@ -26,6 +26,8 @@ public class Exp0308 {
 	public void setMaps(Map<String, String> maps) {
 		this.maps = maps;
 	}
+	// toString() : 객체를 생성하고, 참조변수로 출력처리할 때 default로 리턴할 문자열을
+	//	선언하는 기능 메서드이다.
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub

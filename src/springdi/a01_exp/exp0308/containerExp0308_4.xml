@@ -23,7 +23,7 @@
 
 	<context:property-placeholder
 		location="classpath:/springdi/a01_exp/exp0308/info2"/>
-		<bean id="prod01" class="springdi.z01_vo.Product">
+		<bean id="prod" class="springdi.z01_vo.Product">
 			<property name="pname" value="${pname}"/>
 			<property name="price" value="${price}"/>
 			<property name="cnt" value="${cnt}"/>

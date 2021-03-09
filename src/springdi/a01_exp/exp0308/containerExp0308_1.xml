@@ -41,6 +41,8 @@
 			<constructor-arg value="LG트윈스" />
 			<property name="pList">
 				<list>
+				<!-- 객체를 할당할 때, ref속성값 bean으로 선언된 객체의
+				id나 name값을 할당한다. -->
 					<ref bean="no19"/>
 					<ref bean="no22"/>
 					<ref bean="no33"/>

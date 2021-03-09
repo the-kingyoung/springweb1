@@ -16,6 +16,12 @@ public class A03_DI_Exp0308_2 {
 
 		Exp0308 exp2 = ctx.getBean("exp2",Exp0308.class);
 		System.out.println(exp2);
+		/*
+		 [list=[예제1번, 예제2번, 예제3번]],
+		 [sets=[예제1, 예제2, 예제3]],
+		 [props={1=정답, 2=오답}],
+		 [maps={예제1번=O, 예제2번=O, 예제3번=O}]
+		 */
 	}
 
 }

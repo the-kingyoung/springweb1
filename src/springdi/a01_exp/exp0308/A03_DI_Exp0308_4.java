@@ -14,11 +14,11 @@ public class A03_DI_Exp0308_4 {
 		AbstractApplicationContext ctx
 		=new GenericXmlApplicationContext(
 				"springdi\\a01_exp\\exp0308\\containerExp0308_4.xml");
-		Product prod01 = ctx.getBean("prod01",Product.class);
-		System.out.println(prod01.getPname());
-		System.out.println(prod01.getPrice());
-		System.out.println(prod01.getCnt());
-				
+		Product prod = ctx.getBean("prod",Product.class);
+		System.out.println("# 파일에 객체 호출 #");
+		System.out.println(prod.getPname());
+		System.out.println(prod.getPrice());
+		System.out.println(prod.getCnt());
 	}
 
 }

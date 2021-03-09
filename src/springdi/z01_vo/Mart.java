@@ -39,7 +39,7 @@ public class Mart {
 			System.out.println(prod.getPname());
 			System.out.println(prod.getPrice());
 			System.out.println(prod.getCnt());
-		}else {
+		}else{
 			System.out.println("# 살 물건이 별로 없네요. #");
 		}
 	}
@@ -52,6 +52,16 @@ public class Mart {
 	public Product getProd() {
 		return prod;
 	}
+	/*
+	byName이면
+	
+	1. type : Product
+	2. setProd : property prod
+		<bean id="prod" class="@@@.Product">
+		<bean id="product" class="@@@.Product">
+		<bean id="p01" class="@@@.Product">
+	
+	 */
 	public void setProd(Product prod) {
 		this.prod = prod;
 	}
