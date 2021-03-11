@@ -37,6 +37,8 @@
 			자동으로 할당된다.
 		3) constructor : 생성자가 정의에 해당  type 있을 때.
 		4) autodetect : 생성자나 메서드에 해당 type이 있을 때, 자동으로 할당된다.
+			- 우선 생성자에 매개변수로 해당 type이 있는지를 먼저 찾고
+			그 다음 메서드에 매개변수로 해당 type이 있는지를 확인하는 처리를 말한다.
  -->
  	<!-- 
  	1. autowire="byType"일 때 
@@ -49,6 +51,19 @@
  	<bean id="mart" class="springdi.z01_vo.Mart" autowire="byType">
  		<constructor-arg value="행복"/>
  	</bean>
-
  	
+ 	
+ 	<bean id="part3" class="springdi.z01_vo.Compart">
+ 		<constructor-arg value="SSD"/>
+ 		<constructor-arg value="256GB"/>
+ 	</bean>
+ 	<!-- 
+ 	autowire="byName"이면, 해당 id값과 설정하는 property와 동일한 것을
+ 	객체에 할당한다.
+ 	
+ 	-->
+ 	<bean id="com" class="springdi.z01_vo.Computer2" autowire="byType">
+ 		<constructor-arg value="LG그램"/>
+
+ 	</bean>
 </beans>      

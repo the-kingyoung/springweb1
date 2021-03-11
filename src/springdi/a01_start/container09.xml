@@ -35,6 +35,15 @@
 5. java Code에서 활용 
 	@Value("${key}")
 	String key;
+	
+	
+로컬에서 개발환경 ==> 개발서버(was/DB/UNIX운영/file서버) 
+	==> test서버(was/DB/UNIX/file서버) ==> 운영서버(was/DB/UNIX/file서버)
+외부연계서버(email서버, ftp, telnet서버, 다른 웹서비스 연동)
+# 필요정보
+1. ip/port/id/pass/sid
+2. 소스 내부에 위 정보들이 곳곳에 필요로 하는데, 이것을 서버가 변경이 될 때마다
+	소스를 찾아서 변경하는 것보다 특정 파일/DB에 key/value 형식으로 처리하는 것이 효과적이다.
 
 -->
 <context:property-placeholder 

@@ -5,6 +5,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.springframework.stereotype.Repository;
+
 import jspexp.z01_vo.Dept;
 import jspexp.z01_vo.Emp;
 import jspexp.z01_vo.Emp3;
@@ -14,6 +16,7 @@ import jspexp.z01_vo.Member5;
 import jspexp.z01_vo.jobSalary;
 //A01_Dao.empList2
 
+@Repository
 public class A01_Dao {   //DAO : database access object
    // 1. 데이터베이스 연결 처리
    private Connection con;
@@ -278,22 +281,8 @@ public class A01_Dao {   //DAO : database access object
          pstmt=con.prepareStatement(sql);
          pstmt.setString(1, ename);
          pstmt.setString(2, job);
-         rs = pstmt.executeQuery(sql);
-         /*
-         System.out.println(rs.next());
-      // 1행의 데이터가 있는지 여부 확인
-      // 1행의 데이터를 사용할 준비
-         System.out.println("1행 1열: " + rs.getInt(1));
-         System.out.println("1행 2열: " + rs.getString(2));
-      // rs.get데이터 유형(컬럼의 순서)
-         System.out.println(rs.next());
-      // 2행의 데이터가 있는지 여부 확인
-      // 2행의 데이터를 사용할 준비
-         
-      System.out.println("2행 JOB열: " + rs.getString("JOB"));
-      //rs.get데이터유형(컬럼명)
-      System.out.println("2행 SAL열: " + rs.getDouble("SAL"));
-       */
+         rs = pstmt.executeQuery();
+
          int cnt=1;
          while(rs.next()) {
         	 
@@ -910,6 +899,181 @@ public void deleteEmp(int empno) {
          e.printStackTrace();
       }
       System.out.println("접속 성공kk");
+      
+      return list;
+   }
+
+// ex) emp5
+   //public ArrayList<Emp5> elist2(int part){
+/*
+# PreparedStatement 객체 활용하기.
+1. SQL의 틀을 미리 정해놓고, 나중에 값을 지정하는 방식.
+	select *
+	from emp
+	where ename like'%'||?||'%'
+	and job like '%'||?||'%'
+	pstmt.setString(1,"홍");	 ?의 순서 1부터 붙여서 사용한다.
+	pstmt.setString(2,"A");
+ 2. 왜 사용하는가 ?
+ 	1) sql injection을 막기위해 사용된다.
+ 	2) db 서버의 sql 해석 속도를 향상시켜 빠른 처리를 한다.
+ 	
+ */
+// 조회 처리 메서드.. (매개변수 있는 처리)
+   public ArrayList<Emp> empList(Emp sch){
+      ArrayList<Emp> list = new ArrayList<Emp>();
+      // 1. 공통메서드 호출
+      try {
+         setCon();
+      // 2. Statement 객체 생성 (연결객체 - Connection)
+         /*
+			SELECT  e.*, d.dname, m.ename mname
+			FROM  emp e, dept d ,emp m
+			WHERE e.mgr=m.empno AND e.deptno=d.deptno
+			And e.ename LIKE '%'||upper( '' )||'%'
+			AND e.job LIKE '%'||upper( '' )||'%'
+			AND e.deptno = 30 AND e.mgr = 7698 
+			ORDER BY e.empno DESC
+          */
+         
+         
+         
+         String sql = "	SELECT e.*, d.dname, m.ename mname\r\n"
+         		+ "	from emp e, dept d ,emp m \r\n"
+         		+ "	WHERE e.mgr=m.empno AND e.deptno = d.deptno And e.ename LIKE '%'||upper( ? )||'%'\r\n"
+         		+ "	AND e.job LIKE '%'||upper( ? )||'%'\r\n";
+         if(sch.getDeptno()!=0) {
+        	 sql +=" AND e.deptno = ?";
+         }
+         if(sch.getMgr()!=0) {
+        	 sql +=" AND e.mgr = ?";
+         }
+         
+         sql		+= " ORDER BY e.empno desc";
+         //; 빼주세요. ^^ (주의)
+         System.out.println("### mgr sql ###");
+         System.out.println(sql);
+         pstmt=con.prepareStatement(sql);
+         pstmt.setString(1, sch.getEname());
+         pstmt.setString(2, sch.getJob());
+         int cIdx=3;
+         if(sch.getDeptno()!=0)
+        		 pstmt.setInt(cIdx++, sch.getDeptno());        	 
+         if(sch.getMgr()!=0)
+        	 pstmt.setInt(cIdx++, sch.getMgr());        	 
+         //3. ResultSet 객체 생성. (대화객체-Statement)
+         rs = pstmt.executeQuery();
+         int cnt=1;
+         while(rs.next()) {
+
+        	 Emp e = new Emp(rs.getInt("empno"),rs.getString(2),
+        			 rs.getString(3),rs.getInt(4),rs.getDate("hiredate"),
+        			 rs.getDouble(6),rs.getDouble(7),rs.getInt(8),
+        			 rs.getString(9),rs.getString(10));
+        	 //2. ArrayList에 할당.
+        	 list.add(e);
+        	 
+         }
+         System.out.println("객체의 갯수:"+list.size());
+         System.out.println("첫번째 행의 ename : "+list.get(0).getEname());
+         System.out.println("두번째 행의 ename : "+list.get(1).getEname());
+         //ex1) deptList() 기능메서드를 통해 ArrayList<Dept>데이터를 담아서
+         //		데이터 건수와 두번째 부서이름을 출력하세요..
+//         Dept d = new Dept(rs.getInt(0),rs.getString(1),rs.getString(2));
+//         dlist.add(d);
+//     	}
+//     	System.out.println("객체의 갯수 : "+dlist.size());
+//     	System.out.println("두번째 부서 이름 : "+ dlist.get(1).getDeptno());
+         
+      // 4. 자원의 해제
+         rs.close();
+         pstmt.close();
+         con.close();
+      // 5. 예외 처리
+      } catch (SQLException e1) {
+         // TODO Auto-generated catch block
+         e1.printStackTrace();
+         System.out.println(e1.getMessage());
+      }catch(Exception e) {
+    	  System.out.println(e.getMessage());
+      }
+      
+      return list;
+   }
+
+
+
+/*
+1. sql작성
+2. VO 객체 생성 : sql의 결과값에 따른 컬럼명과 type을 확인하여 작성.
+3. 기능 메서드 선언.
+	1) 요청에 의한 입력 : 매개변수로 활용.
+	2) 데이터의 결과에 따라 리턴값 지정.
+		- update, delete, insert : void
+			ex) public void insetEmp(Emp ins)
+		- 단위 변수나 한개의 데이터
+			ex)
+			회원이 등록된 여부
+			public boolean void isMember(String id, String pass)
+			상품의 갯수 : select count(*) from member where...
+			public int memCount(Member sch)
+			회원 상세정보 : select * from member where id=@@@
+			public Member getMember(String id)
+		- 여러개의 데이터
+			ex)
+			공지사항
+			public ArrayList<Board> boardList(Board sch)
+			회원정보리스트
+			public ArrayList<Member> mlist(Member sch)
+			
+		
+*/
+   
+   // 조회 처리 메서드.. (매개변수 없는 처리)
+   public ArrayList<Emp> mgrList(){
+      ArrayList<Emp> list = new ArrayList<Emp>();
+      // 1. 공통메서드 호출
+      try {
+         setCon();
+      // 2. Statement 객체 생성 (연결객체 - Connection)
+         String sql = "SELECT DISTINCT e.mgr, m.ename\r\n"
+         		+ "FROM emp e, emp m\r\n"
+         		+ "WHERE e.mgr = m.empno";
+         stmt = con.createStatement();
+      // 3. ResultSet 객체 생성 (대화객체 - Statement)
+         rs = stmt.executeQuery(sql);
+
+         while(rs.next()) {
+
+        	Emp e = new Emp(rs.getInt(1),
+        			 		rs.getString(2));
+        	list.add(e);
+        	 
+         }
+      // 4. 자원의 해제
+         rs.close();
+         stmt.close();
+         con.close();
+      // 5. 예외 처리
+      } catch (SQLException e1) {
+         // TODO Auto-generated catch block
+         e1.printStackTrace();
+         System.out.println(e1.getMessage());
+      }catch(Exception e) {
+    	  System.out.println(e.getMessage());
+      }
+   
+      
+      
+      
+      String info = "jdbc:oracle:thin:@localhost:1521:xe";
+      try {
+         con = DriverManager.getConnection(info, "scott", "tiger");
+      } catch (SQLException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+      System.out.println("접속 성공");
       
       return list;
    }

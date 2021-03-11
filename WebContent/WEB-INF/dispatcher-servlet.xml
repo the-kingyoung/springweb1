@@ -22,7 +22,7 @@
 		http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 		
 	<context:property-placeholder 
-		location="classpath:/springweb/resource/properties/info"/>	
+		location="classpath:/resource/properties/info"/>	
 		
 	<!-- 
 	스프링에서 사용하게 될 초기 로딩 객체를 선언한다.
@@ -46,6 +46,49 @@
 		<context:include-filter type="annotation" 
 			expression="org.springframework.stereotype.Repository"/>
 	</context:component-scan>
+	<bean class="jspexp.a03_database.A01_Dao"/>
+	<!-- 
+	driver dburl user pas
+	1. 연결 후, 자원해제 메서드 정의 : destroy-method="close"
 	
-	
-</beans>      
+	# database 접속 처리
+	 -->
+	 <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+	 	destroy-method="close">
+	 	<property name="driverClassName" value="${driver}"/>
+	 	<property name="url" value="${dburl}"/>
+	 	<property name="username" value="${user}"/>
+	 	<property name="password" value="${pass}"/>
+	 </bean>
+	<!-- 
+	2. mybatis 공통 xml 파일 설정.
+	 -->
+	 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	 	<!-- BasicDataSource 연결객체의 정보를 mybatis에 할당 처리 -->
+	 	<property name="dataSource" ref="dataSource"/>
+	 	<!-- 공통 mybatis xml파일 설정 -->
+	 	<property name="configLocation" 
+	 		value="classpath:resource/mybatis.Spring.xml"/>
+	 </bean>
+	 <!-- 
+	 3. 사용할 DAO 인터페이스 폴드 위치 지정..
+	  -->
+	  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	  	<property name="basePackage" value="springweb.a02_mvc.a03_dao"></property>
+	  </bean>
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
