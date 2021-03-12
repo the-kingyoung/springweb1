@@ -4,13 +4,101 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="springweb.a02_mvc.a03_dao.A01_EmpDao">
 <!-- 
-// springweb.a02_mvc.a03_dao.A01_EmpDao : namespace
-// emplist : id
-// ArrayList<Emp> : resultMap
-// (Emp sch) : resultType
+// springweb.a02_mvc.a03_dao.A01_EmpDao(인터페이스명) : namespace
+// emplist(메서드명) : id
+// ArrayList<Emp>(리턴객체) : resultMap
+		sql 결과의 property가 동일할 때 자동으로 mapping
+			select ename
+			setEname(String s) column과 property를 mapping
+		ps) Emp/int/boolean : resultType
+// (Emp sch) : parameterType
  -->
  	<resultMap type="emp" id="empResult"/>
+ 	<!-- public ArrayList<Emp> emplist(Emp sch); -->
  	<select id="emplist" resultMap="empResult" parameterType="emp">
- 		Select * from emp2 	
+ 		Select * from emp2
+ 		WHERE 1=1
+ 			AND ename like '%'||upper(#{ename})||'%'
+ 			AND job like '%'||upper(#{job})||'%'
  	</select>
- </mapper>
+ 	<!--  	
+ 	<select id="emplist" resultMap="empResult" parameterType="emp">
+ 		Select * from emp2
+ 		WHERE 1=1
+ 		<if test="ename != null">
+ 			AND ename like '%'||#{ename}||'%'
+ 		</if> 		
+ 		<if test="job != null">
+ 			AND job like '%'||#{job}||'%'
+ 		</if> 
+ 		
+ 		public Emp getEmp(int empno)-->
+ 	<select id="totCnt" resultType="int">
+ 		select count(*) from emp 	
+ 	</select>
+ 	<select id="getEmp" resultType="emp" parameterType="int">
+		SELECT *
+ 	 	FROM emp
+ 	  	WHERE empno=#{empno}
+ 	</select>
+ 	
+ <!-- 
+	public ArrayList<Emp2> searchEmp1(Emp2 sch);
+	public ArrayList<Integer> searchEmp2(Emp2 sch);
+	public ArrayList<Integer> searchEmp3(HashMap<String, Object> hm);
+  -->
+	<resultMap type="emp2" id="emp2Result" />
+	<select id="searchEmp1" resultMap="emp2Result" parameterType="emp2">
+	  SELECT empno
+	  FROM emp
+	  WHERE sal BETWEEN #{start} AND #{end}
+	</select>
+	<resultMap type="int" id="intRs" />
+	<select id="searchEmp2" resultMap="intRs" parameterType="emp2">
+		SELECT empno
+		FROM emp
+		WHERE sal BETWEEN #{start} AND #{end}
+ 	</select>
+	<select id="searchEmp3" resultMap="intRs" parameterType="hashmap">
+		SELECT empno
+		FROM emp
+		WHERE sal BETWEEN #{start} AND #{end}
+	</select>
+	<!-- 
+	 SELECT * 
+	 FROM dept 
+	 WHERE deptno=#{deptno};
+	public Dept getDept(int deptno)
+	
+	SELECT deptno, max(sal) sal
+	 FROM emp
+	 GROUP BY deptno*/
+	public ArrayList<Emp> maxSal()
+	
+	
+	 -->
+	<select id="getDeptno" resultType="dept" parameterType="int">
+		SELECT * 
+		FROM dept 
+		WHERE deptno=#{deptno}
+	</select>
+	<select id="maxSal" resultMap="empResult">
+		SELECT deptno, max(sal) sal
+	 	FROM emp
+	 	GROUP BY deptno
+	</select>
+<!-- 
+	public ArrayList<Emp> seachJob(String job);
+	public int maxSalDeptno(int deptno);
+ -->
+	<select id="seachJob" resultMap="empResult" parameterType="String">
+		 SELECT *
+		 FROM emp
+		 WHERE job = #{job}
+	</select>
+	<select id="maxSalDeptno" resultType="int" parameterType="int">
+		SELECT max(sal)
+	 	FROM emp
+	 	WHERE deptno = #{deptno}
+	</select>
+</mapper>

@@ -58,9 +58,11 @@
 	
 3. spring MVC
 	- Controller : java 클래스로 선언
-		controller --> service --> dao
-		controller <-- service <-- dao
-		
+		controller --> service --> dao(인터페이스) ==> DB서버
+						비지니스 로직 처리
+						
+		controller <-- service <-- dao(실객체)
+						비지니스 로직 처리
 	- Model : controller 안에 선언
 		화면단에 보내줄 핵심 데이터 처리
 		# model데이터를 만들기 위해 도와주는 process 객체들!!
@@ -80,8 +82,15 @@
 	
 5. 데이터베이스 처리(DAO-mybatis프레임웍 활용)
 	1) 컨테이너에 선언 방법(connection)
+		- 연결객체
+		- mybatis공통 xml 위치
+		- dao 인터페이스 위치
 	2) mybatis공통 설정 xml
 	3) 기능별 sql xml 설정 방법
+	4) mybatis 프레임웍을 통해서 실체객체를 만들어 주는 
+		dao interface 선언 패키지
+	5) XXXmapper.xml vs DAO인터페이스 mapping 
+	
 	
 6. MVC 중급
 	1) 여러가지 viewer 활용
@@ -147,6 +156,10 @@
 
 # ModelAttribute
 1. controller단의 공통 모델데이터에 대한 선언.
+	- 하나의 업무단위로 controller를 쓰고,
+	- 하나의 기능단위로 mapping을 처리한다.
+	ex) 사원정보 처리 - 리스트, 상세화면, 등록/수정/삭제
+		부서정보 콤보박스, 관리자정보 콤보박스, 
 2. 요청값+모델데이터를 동시에 처리
 	
 	

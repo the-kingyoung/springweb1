@@ -30,6 +30,19 @@
 </script>
 </head>
 <body>
-	<h3>예제 2번입니다! 스프링 컨트롤러 선언</h3>
+	<h3>스프링 컨트롤러 선언.</h3>
+	${fruits.size()}
+	<table>
+		<tr><th>타이틀</th></tr>
+		<tr><td>
+			<select>
+				<option value="0">물건선택</option>
+				<c:forEach var="fruit" items="${fruits}">
+				<option value="${fruit.price}">
+					${fruit.name}(${fruit.price})</option>
+				</c:forEach>
+			</select>
+		</td></tr>
+	</table>
 </body>
 </html>

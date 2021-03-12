@@ -77,18 +77,3 @@
 	  	<property name="basePackage" value="springweb.a02_mvc.a03_dao"></property>
 	  </bean>
 </beans>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
