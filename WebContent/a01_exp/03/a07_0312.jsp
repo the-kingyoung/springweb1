@@ -27,7 +27,7 @@
 		매개변수의 변수가 단일데이터일 경우 parameterType이 타입,
 					  단일 객체일 경우 parameterType이 클래스명,
 					  배열형 객체일 경우 parameterType으로 HashMap사용
-					  
+					   
 		
 [하] 2. 다음의 sql에 해당 하는 dao단과 XXXMapper.xml을 선언하세요
         0)  select *
@@ -55,7 +55,10 @@
          2) 관리자이름으로 사원명 리스트 조회
          3) 사원명 3명 입력하여 최고급여 조회
          4) 입사년도기준으로 사원정보(전체) 조회
-[하] 4. mybatis기준으로 부서정보 조회 화면을 만드세요(웹화면까지)   DeptDao(인터페이스), DeptMapper.xml 추가
+         
+[하] 4. mybatis기준으로 부서정보 조회 화면을 만드세요(웹화면까지)   
+					DeptDao(인터페이스), DeptMapper.xml 추가
+					
 [중] 5. mybatis기준으로 사원정보+부서정보+급여등급 조회(직책/부서명/급여등급) 화면을 만드세요(웹화면까지)
 
 --%>

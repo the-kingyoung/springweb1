@@ -4,18 +4,21 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="springweb.a02_mvc.a03_dao.A01_EmpDao">
 <!-- 
-// springweb.a02_mvc.a03_dao.A01_EmpDao(인터페이스명) : namespace
-// emplist(메서드명) : id
-// ArrayList<Emp>(리턴객체) : resultMap
-		sql 결과의 property가 동일할 때 자동으로 mapping
-			select ename
-			setEname(String s) column과 property를 mapping
+springweb.a02_mvc.a03_dao.A01_EmpDao(인터페이스명) : namespace
+
+emplist(메서드명) : id
+
+ArrayList<Emp>(리턴객체) : resultMap
+	sql 결과의 property가 동일할 때 자동으로 mapping
+		select ename
+		setEname(String s) column과 property를 mapping
 		ps) Emp/int/boolean : resultType
-// (Emp sch) : parameterType
+		
+(Emp sch) : parameterType
  -->
- 	<resultMap type="emp" id="empResult"/>
- 	<!-- public ArrayList<Emp> emplist(Emp sch); -->
- 	<select id="emplist" resultMap="empResult" parameterType="emp">
+	<resultMap type="emp" id="empResult"/>
+ 	<!-- public ArrayList<Emp> emplist(Emp sch);		<==A01_EmpDao에 있음 -->
+	<select id="emplist" resultMap="empResult" parameterType="emp">
  		Select * from emp2
  		WHERE 1=1
  			AND ename like '%'||upper(#{ename})||'%'
@@ -53,6 +56,7 @@
 	  FROM emp
 	  WHERE sal BETWEEN #{start} AND #{end}
 	</select>
+	
 	<resultMap type="int" id="intRs" />
 	<select id="searchEmp2" resultMap="intRs" parameterType="emp2">
 		SELECT empno
@@ -68,14 +72,13 @@
 	 SELECT * 
 	 FROM dept 
 	 WHERE deptno=#{deptno};
-	public Dept getDept(int deptno)
+	 
+	 public Dept getDept(int deptno)
 	
 	SELECT deptno, max(sal) sal
 	 FROM emp
 	 GROUP BY deptno*/
 	public ArrayList<Emp> maxSal()
-	
-	
 	 -->
 	<select id="getDeptno" resultType="dept" parameterType="int">
 		SELECT * 
@@ -101,4 +104,22 @@
 	 	FROM emp
 	 	WHERE deptno = #{deptno}
 	</select>
+<!-- 주말 예제==============================================================================
+			select *
+            from dept
+            where dname like '%'||#{dname}||'%'
+            and job  like '%'||#{job}||'%'
+            
+            public Dept getInfo(String dname, String job);
+-->
+	<select id="getInfo" resultType="dept" parameterType="String">
+		select *
+		from dept
+		where dname like '%'||#{dname}||'%'
+		and job  like '%'||#{job}||'%'
+	</select>
+<!--  
+
+-->
+
 </mapper>
