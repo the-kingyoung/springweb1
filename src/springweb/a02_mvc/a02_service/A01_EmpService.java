@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import springweb.a02_mvc.a03_dao.A01_EmpDao;
+import springweb.z02_vo.Dept;
 import springweb.z02_vo.Emp;
 import springweb.z03_vo.EmpDept;
 
@@ -30,11 +31,25 @@ public class A01_EmpService {
 			System.out.println(empno);
 		}
 		//dao.schEDGList(new EmpDept());
-		dao.empInsert(new Emp("마길동(연습)","CLERK",7902,3500,100,10));
+		//dao.empInsert(new Emp("마길동(연습)","CLERK",7902,3500,100,10));
 		 
 		return dao.emplist(sch);
 	}
+	public void empInsert(Emp dto) {
+		dao.empInsert(dto);
+	};
+	
 	public ArrayList<EmpDept> schEDGList(EmpDept sch){
 		return dao.schEDGList(sch);
 	}
+	public ArrayList<String> getJobs(){
+		return dao.getJobs();
+	}
+	public ArrayList<Emp> getMgrs(){
+		return dao.getMgrs();
+	}
+	public ArrayList<Dept> getDepts(){
+		return dao.getDepts();
+	}
+
 }

@@ -25,6 +25,23 @@ public class A01_EmpController {
 		d.addAttribute("emplist", service.emplist(sch));
 		return "WEB-INF\\views\\a02_mvc\\a01_empList.jsp";
 	}
+	// http://localhost:7080/springweb/insEmpForm.do
+	@RequestMapping("/insEmpForm.do")
+	public String insEmpForm() {
+		return "WEB-INF\\views\\a02_mvc\\a01_empInsertForm.jsp";
+	}
+	@RequestMapping("/insertEmp.do")
+	public String insertEmp(Emp ins) {
+		System.out.println("# 등록 처리 : "+ins.getEname());
+		service.empInsert(ins);
+		return "WEB-INF\\views\\a02_mvc\\a01_empInsertForm.jsp";
+	}
+	
+	
+	
+	
+	
+	
 	// http://localhost:7080/springweb/empDeptList.do
 	@RequestMapping("/empDeptList.do")
 	public String empDeptList(@ModelAttribute("sch") EmpDept sch, Model d) {
@@ -36,34 +53,17 @@ public class A01_EmpController {
 	
 	@ModelAttribute("jobs")
 	public ArrayList<String> getJobs(){
-		ArrayList<String> jobs = new ArrayList<String>();
-		jobs.add("CLERK");
-		jobs.add("SALESMAN");
-		jobs.add("PRESIDENT");
-		jobs.add("MANAGER");
-		jobs.add("ANALYST");
-		return jobs;
+		return service.getJobs();
 	}
 	
 	@ModelAttribute("depts")
 	public ArrayList<Dept> getDepts(){
-		ArrayList<Dept> depts = new ArrayList<Dept>();
-		depts.add(new Dept(10,"ACCOUNTING",null));
-		depts.add(new Dept(20,"RESEARCH",null));
-		depts.add(new Dept(30,"SALES",null));
-		depts.add(new Dept(40,"OPERATIONS",null));
-		return depts;
+		return service.getDepts();
 	}
 	
 	@ModelAttribute("mgrs")
 	public ArrayList<Emp> getMgrs(){
-		ArrayList<Emp> mgrs = new ArrayList<Emp>();
-		mgrs.add(new Emp(7566,"JONES"));
-		mgrs.add(new Emp(7782,"CLARK"));
-		mgrs.add(new Emp(7839,"KING"));
-		mgrs.add(new Emp(7698,"BLAKE"));
-		mgrs.add(new Emp(7902,"FORD"));
-		return mgrs;
+		return service.getMgrs();
 	}
 
 }

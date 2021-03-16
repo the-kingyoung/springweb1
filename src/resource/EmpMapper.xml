@@ -14,7 +14,8 @@
  	<insert id="empInsert" parameterType="emp">
  		INSERT INTO emp01 VALUES(emp01_seq.nextval, #{ename},
  		#{job}, #{mgr}, SYSDATE, #{sal}, #{comm}, #{deptno})
- 	</insert>	
+ 	</insert>
+ 		
  	<select id="totCnt" resultType="int">
  		select count(*) from emp01 	
  	</select>
@@ -61,7 +62,7 @@
 	 	from emp01
 	 	WHERE deptno = #{deptno}
 	</select>
-<!-- 주말 예제==============================================================================
+<!--
 			select *
             from dept
             where dname like '%'||#{dname}||'%'
@@ -94,8 +95,25 @@
 		AND grade  = #{grade}
 		</if>
 	</select>
+<!-- 
+	public ArrayList<Dept> getDepts();
+	public ArrayList<String> getJobs();
+	public ArrayList<Emp> getMgrs();
+-->
+	<resultMap type="dept" id="deptMap"/>
+	<select id="getDepts" resultMap="deptMap">
+		SELECT * FROM DEPT
+	</select>
 	
+	<resultMap type="String" id="strMap"/>
+	<select id="getJobs" resultMap="strMap">
+		SELECT DISTINCT job FROM emp
+	</select>
 	
-	
+	<select id="getMgrs" resultMap="empResult">
+		SELECT DISTINCT e.mgr, m.ename
+		FROM emp e, emp m
+		WHERE e.mgr = m.empno
+	</select>
 	
 </mapper>

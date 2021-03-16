@@ -97,12 +97,13 @@
 2. dto 확인
 3. dao 작성 public void empInsert(Emp dto);
 4. EmpMapper.xml 작성.
-5. 등록 인터페이스 Emplist 화면(jsp)
+---------------------------------------------------
+5. 등록 인터페이스 Emplist 화면(jsp)(a02_mvc\a01_empList.jsp)
 	- 이벤트 처리
 	- 등록할 form url호출 /insEmpForm.do
-6. controller 추가.
+6. controller 추가.(A01_EmpController.java)
 	/insEmpForm.do
-7. view단 작성
+7. view단 작성(a02_mvc\a01_empInsertForm.jsp)
 	[DB] 사원번호
 	[입력] 사원명
 	[입력] 직책(select)
@@ -111,13 +112,16 @@
 	[입력] 급여
 	[입력] 보너스
 	[입력] 부서명(select)
-	/insertEmp.do
-8. Controller 추가
+	action="${path}/insertEmp.do"
+======================================================
+8. Controller(A01_EmpController.java) 추가
 	/insertEmp.do
 
 9. service
-	dao 호출
-10. Controller에서
+	입력메서드 선언 public void empInsert(Emp dto);
+	dao 호출 empInsert(Emp dto);
+	
+10. Controller(A01_EmpController.java)에서
 	1) 등록 service 호출
 	2) 등록 처리 완료 모델 처리
 11. view

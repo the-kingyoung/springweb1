@@ -20,8 +20,26 @@
 <%--
 [스프링]
 [하] 1. 데이터 처리가된 리스트 화면 개발 처리 순서를 간단하게 기술하세요
+		1) 조건과 출력 내용에 맞는 sql 작성
+			select *		==> resultType or resultMap 을 설정 
+			from 테이블
+			where 조건문		==> parameterType, parameterMap (권장하지 않음)
+			
+		2) 출력 결과를 위한 VO, 입력처리를 위한 VO/DTO
+		
+		3) DAO 메서드 선언 : public ArrayList<VO> 메서드명(매개 객체);
+		4) 공통 vo선언/alias, XXXMapper.xml 선언
+		5) service단 dao 호출
+		6) Controller선언
+			service단 호출 model데이터 맵핑
+		7) View 호출(jsp)
+			모델 데이터 mapping
+		
+		
+		
 [하] 2. 관리자 정보(관리자번호,관리자명)를 가져오는 dao 하위 메서드를 정의하고, EmpMapper.xml를 추가하고,
         현재 모델 데이터를 dao에서 service로 가져온 것을 처리해보세요.
+        
 
 --%>
 //

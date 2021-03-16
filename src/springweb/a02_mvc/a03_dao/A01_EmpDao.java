@@ -17,6 +17,7 @@ public interface A01_EmpDao {
 	// mybatis 프레임워크에서 실제 객체를 생성해준다.
 	//springweb.a02_mvc.a03_dao.A01_EmpDao
 	public ArrayList<Emp> emplist(Emp sch);
+	public void empInsert(Emp dto);
 /*
  # dao, mapper :
  ex1) SELECT count(*) FROM emp;
@@ -76,8 +77,12 @@ ex4) SELECT max(sal)
 
 	public ArrayList<EmpDept> schEDGList(EmpDept sch);
 	
-	public void empInsert(Emp dto);
+	public ArrayList<String> getJobs();
+	public ArrayList<Emp> getMgrs();
+	public ArrayList<Dept> getDepts();
+/*
 	
+*/
 	
 	
 	
