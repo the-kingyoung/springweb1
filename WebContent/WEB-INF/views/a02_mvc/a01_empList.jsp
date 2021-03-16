@@ -35,7 +35,7 @@
 	<form class="form-inline" method="post" action="${path}/empList2.do">
 		<input class="form-control mr-sm-2" type="text" 
 			name="ename" value="${sch.ename}"
-			placeholder="사원명">
+			placeholder="사원명" style="width:30%">
 		<input class="form-control mr-sm-2" type="text" 
 			name="job"  value="${sch.job}"
 			placeholder="직책명">

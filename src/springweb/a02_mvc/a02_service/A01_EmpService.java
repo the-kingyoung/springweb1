@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 
 import springweb.a02_mvc.a03_dao.A01_EmpDao;
 import springweb.z02_vo.Emp;
+import springweb.z03_vo.EmpDept;
 
 @Service
 public class A01_EmpService {
-	@Autowired(required = false)
+	@Autowired(required = false)	// 얘한테 붙어라
 	private A01_EmpDao dao;
+	
 	public ArrayList<Emp> emplist(Emp sch){
 		if(sch.getEname()==null) sch.setEname("");
 		if(sch.getJob()==null) sch.setJob("");
@@ -20,12 +22,19 @@ public class A01_EmpService {
 		System.out.println("데이터 건수 : "+dao.totCnt());
 		System.out.println("## emp객체 : "+dao.getEmp(7499).getEname());
 		HashMap<String , Integer> hm = new HashMap<String, Integer>();
+		
 		hm.put("start", 1000);
 		hm.put("end", 3000);
 		System.out.println("검색된 사원 번호");
 		for(int empno : dao.searchEmp3(hm)) {
 			System.out.println(empno);
 		}
+		//dao.schEDGList(new EmpDept());
+		dao.empInsert(new Emp("마길동(연습)","CLERK",7902,3500,100,10));
+		 
 		return dao.emplist(sch);
+	}
+	public ArrayList<EmpDept> schEDGList(EmpDept sch){
+		return dao.schEDGList(sch);
 	}
 }

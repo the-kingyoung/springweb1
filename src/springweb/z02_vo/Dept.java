@@ -1,23 +1,23 @@
 package springweb.z02_vo;
 // springweb2.a01_mvc.z01_vo.Dept
 public class Dept {
-	private String deptno;
+	private int deptno;
 	private String dname;
 	private String loc;
 	public Dept() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Dept(String deptno, String dname, String loc) {
+	public Dept(int deptno, String dname, String loc) {
 		super();
 		this.deptno = deptno;
 		this.dname = dname;
 		this.loc = loc;
 	}
-	public String getDeptno() {
+	public int getDeptno() {
 		return deptno;
 	}
-	public void setDeptno(String deptno) {
+	public void setDeptno(int deptno) {
 		this.deptno = deptno;
 	}
 	public String getDname() {

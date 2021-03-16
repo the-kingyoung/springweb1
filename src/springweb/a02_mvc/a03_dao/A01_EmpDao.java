@@ -10,6 +10,7 @@ import springweb.z02_vo.Emp;
 // ArrayList<Emp> : resultMap
 // (Emp sch) : resultType
 import springweb.z02_vo.Emp2;
+import springweb.z03_vo.EmpDept;
 
 public interface A01_EmpDao {
 	// 여기에 있는 구성요소 하나 하나가 EmpMapper.xml에 있는 구성요소와 연동하여
@@ -72,28 +73,20 @@ ex4) SELECT max(sal)
 	public ArrayList<Emp> maxSal();
 	public ArrayList<Emp> seachJob(String job);
 	public int maxSalDeptno(int deptno);
-/*
-        0)  select *
-            from dept
-            where dname like '%'||#{dname}||'%'
-            and job  like '%'||#{job}||'%'
-            
-            public Dept getInfo(String dname, String job);
-            
-        1) SELECT empno, ename, sal, grade
-            FROM emp, salgrade
-            WHERE sal BETWEEN losal AND hisal
-            AND sal>=#{sal}
-            
-        2) SELECT empno, ename, job, sal
-            FROM EMP e 
-            WHERE ( sal >=#{start} AND sal<=#{end} )
-            OR job = #{job}
-             
-        3) SELECT ename, loc, to_char(hiredate, 'Q') part
-            FROM emp e, dept d
-            WHERE e.deptno = d.deptno
-            AND to_char(hiredate, 'Q') IN (#{p01},#{p02})
-*/
-	public Dept getInfo(String dname, String job);
+
+	public ArrayList<EmpDept> schEDGList(EmpDept sch);
+	
+	public void empInsert(Emp dto);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

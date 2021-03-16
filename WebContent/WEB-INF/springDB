@@ -5,11 +5,20 @@
 		- mybatis 공통 xml 선언
 		- 사용할 DAO인터페이스 패키지 위치 선언.
 	2) mybatis 공통 xml 처리
-		- 사용할 vo/dto 등록
-		- 개별 업무별 sql저장할 mapper.xml 등록
+		- 사용할 vo/dto alias(단축명 사용 위해) 등록
+		- 개별 업무별 sql저장할 XXXmapper.xml 등록
+			업무단위로 추가, 
+			ex) emp테이블 조회 등록 수정 삭제 ==> dao 1개, xxxMapper.xml 1개
+				dept 테이블 조회 등록 수정 삭제 ==> dao, xxxMapper.xml 등록
 	3) XXXMapper.xml
 		- namespace
-		- resultMap/resultType
+		- resultMap/resultType ==> dao의 기능메서드의 return 타입 형식에 따라서	//result가 들어가면 결과내용인데, 이것은 return값을 뜻한다
+									ArrayList<VO>
+									ArrayList<String>	==> resultMap
+									int
+									String
+									Person ==> resultType
+									
 		- id
 		- parameterType
 2. DB연결 화면 구현 순서
@@ -27,7 +36,7 @@
 		dao인터페이스명 == namespace
 		메서드명		 == id
 		리턴할 객체	 == resultMap/resultType
-		매개변수/매개객체== parameterType
+		매개변수/매개객체== parameterMap/parameterType
 		
 	2) controller -- service -- dao 연동 처리관계 이해
 		각각의 역할 이해
@@ -54,8 +63,8 @@
 				<resultMap type="emp" id="empResult"/>
 				<select resultMap = "empResult">
 				
-			ex) : public String[] getEnames()
-				<resultMap type="java.lang.String" id="strResult"
+			ex) : public ArrayList<String> getEnames()
+				<resultMap type="String" id="strResult"
 				<select resultMap = "stResult">
 				
 		- 입력할 매개변수 - parameterType
@@ -70,7 +79,209 @@
 				<select parameterType="emp"
 				
 			배열형 - parameterMap : 입력값이 배열형 객체일 때
+					ex) 승진할 사원전체정보를 다중의 사원번호를 통해서 검색
+					select * from emp where empno in (7800,7801,7802)
+					public ArrayList<Emp> schEmp(ArrayList<Integer> empnos)
+					<parameterMap type="int" id="intParam"
+					<select parameterMap="intParam"
+			
+			
 					public void insert(HashMap<String,Object> ins);
 					<insert parameterType="hashmap"
 							${키값}
 		- id : 메서드명..
+		
+
+# 사원 정보 등록 처리
+1. sql insert
+2. dto 확인
+3. dao 작성 public void empInsert(Emp dto);
+4. EmpMapper.xml 작성.
+5. 등록 인터페이스 Emplist 화면(jsp)
+	- 이벤트 처리
+	- 등록할 form url호출 /insEmpForm.do
+6. controller 추가.
+	/insEmpForm.do
+7. view단 작성
+	[DB] 사원번호
+	[입력] 사원명
+	[입력] 직책(select)
+	[입력] 관리자(select)
+	[DB] 입사일
+	[입력] 급여
+	[입력] 보너스
+	[입력] 부서명(select)
+	/insertEmp.do
+8. Controller 추가
+	/insertEmp.do
+
+9. service
+	dao 호출
+10. Controller에서
+	1) 등록 service 호출
+	2) 등록 처리 완료 모델 처리
+11. view
+	등록 완료 계속 등록 여부 처리
+
+		
+		
+		
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="springweb.a02_mvc.a03_dao.A01_EmpDao">
+<!-- 
+springweb.a02_mvc.a03_dao.A01_EmpDao(인터페이스명) : namespace
+
+emplist(메서드명) : id
+
+ArrayList<Emp>(리턴객체) : resultMap
+	sql 결과의 property가 동일할 때 자동으로 mapping
+		select ename
+		setEname(String s) column과 property를 mapping
+		ps) Emp/int/boolean : resultType
+		
+(Emp sch) : parameterType
+ -->
+	<resultMap type="emp" id="empResult"/>
+ 	<!-- public ArrayList<Emp> emplist(Emp sch);		==A01_EmpDao에 있음 -->
+	<select id="emplist" resultMap="empResult" parameterType="emp">
+ 		Select * from emp01
+ 		WHERE 1=1
+ 			AND ename like '%'||upper(#{ename})||'%'
+ 			AND job like '%'||upper(#{job})||'%'
+ 			order by empno desc
+ 	</select>
+ 	<insert id="empInsert" parameterType="emp">
+ 		INSERT INTO emp01 VALUES(emp01_seq.nextval, #{ename},
+ 		#{job}, #{mgr}, SYSDATE, #{sal}, #{comm}, #{deptno})
+ 	</insert>	
+ 	<!--  	
+ 	public void empInsert(Emp dto);
+ 	
+ 	<select id="emplist" resultMap="empResult" parameterType="emp">
+ 		Select * from emp01
+ 		WHERE 1=1
+ 		<if test="ename != null">
+ 			AND ename like '%'||#{ename}||'%'
+ 		</if> 		
+ 		<if test="job != null">
+ 			AND job like '%'||#{job}||'%'
+ 		</if> 
+ 		
+ 		public Emp getEmp(int empno)-->
+ 	<select id="totCnt" resultType="int">
+ 		select count(*) from emp01 	
+ 	</select>
+ 	<select id="getEmp" resultType="emp" parameterType="int">
+		SELECT *
+ 	 	from emp01
+ 	  	WHERE empno=#{empno}
+ 	</select>
+ 	
+ <!-- 
+	public ArrayList<Emp2> searchEmp1(Emp2 sch);
+	public ArrayList<Integer> searchEmp2(Emp2 sch);
+	public ArrayList<Integer> searchEmp3(HashMap<String, Object> hm);
+  -->
+	<resultMap type="emp2" id="emp2Result" />
+	<select id="searchEmp1" resultMap="emp2Result" parameterType="emp2">
+	  SELECT empno
+	  from emp01
+	  WHERE sal BETWEEN #{start} AND #{end}
+	</select>
+	
+	<resultMap type="int" id="intRs" />
+	<select id="searchEmp2" resultMap="intRs" parameterType="emp2">
+		SELECT empno
+		from emp01
+		WHERE sal BETWEEN #{start} AND #{end}
+ 	</select>
+	<select id="searchEmp3" resultMap="intRs" parameterType="hashmap">
+		SELECT empno
+		from emp01
+		WHERE sal BETWEEN #{start} AND #{end}
+	</select>
+	<!-- 
+	 SELECT * 
+	 FROM dept 
+	 WHERE deptno=#{deptno};
+	 
+	 public Dept getDept(int deptno)
+	
+	SELECT deptno, max(sal) sal
+	 from emp01
+	 GROUP BY deptno*/
+	public ArrayList<Emp> maxSal()
+	 -->
+	<select id="getDeptno" resultType="dept" parameterType="int">
+		SELECT * 
+		FROM dept 
+		WHERE deptno=#{deptno}
+	</select>
+	<select id="maxSal" resultMap="empResult">
+		SELECT deptno, max(sal) sal
+	 	from emp01
+	 	GROUP BY deptno
+	</select>
+<!-- 
+	public ArrayList<Emp> seachJob(String job);
+	public int maxSalDeptno(int deptno);
+ -->
+	<select id="seachJob" resultMap="empResult" parameterType="String">
+		 SELECT *
+		 from emp01
+		 WHERE job = #{job}
+	</select>
+	<select id="maxSalDeptno" resultType="int" parameterType="int">
+		SELECT max(sal)
+	 	from emp01
+	 	WHERE deptno = #{deptno}
+	</select>
+<!-- 주말 예제==============================================================================
+			select *
+            from dept
+            where dname like '%'||#{dname}||'%'
+            and job  like '%'||#{job}||'%'
+            
+            public Dept getInfo(String dname, String job);
+-->
+	<select id="getInfo" resultType="dept" parameterType="String">
+		select *
+		from dept
+		where dname like '%'||#{dname}||'%'
+		and job  like '%'||#{job}||'%'
+	</select>
+<!--  
+		ArrayList<EmpDept> schEDGList(EmpDept sch);
+-->
+	<resultMap type="empdept" id="edMap"/>
+	<select id="schEDGList" resultMap="edMap" parameterType="">
+		SELECT e.*, dname, loc, grade
+		from emp0101 e, dept d, SALGRADE s 
+		WHERE e.deptno = d.deptno
+		AND e.sal BETWEEN s.losal AND s.hisal
+		<if test="job!=null and job !='' ">
+		AND job = #{job}
+		</if>
+		<if test="deptno!=0">
+		AND e.deptno = #{deptno}
+		</if>
+		<if test="grade != null and grade !='' ">
+		AND grade  = #{grade}
+		</if>
+	</select>
+	
+	
+	
+	
+</mapper>		
+		
+		
+		
+		
+		
+		
+		
+		
