@@ -94,12 +94,21 @@
 
 # 사원 정보 등록 처리
 1. sql insert
-2. dto 확인
+	select max(empno)+1 from emp01;
+	create sequence emp01_seq
+		start with 7935
+		minvalue 1000
+		maxvalue 9999
+		cycle;
+	insert into emp01 values(emp01_seq.nextval, '홍길동',
+	'CLERK', 7902, SYSDATE, 3000,1000,10);
+2. vo/dto 확인
 3. dao 작성 public void empInsert(Emp dto);
-4. EmpMapper.xml 작성.
----------------------------------------------------
+4. EmpMapper.xml 작성. : 
+	namespace, id, parameterType, resultType/resultMap
+-----------------------------------------------------------
 5. 등록 인터페이스 Emplist 화면(jsp)(a02_mvc\a01_empList.jsp)
-	- 이벤트 처리
+	- 이벤트 처리 버튼 처리
 	- 등록할 form url호출 /insEmpForm.do
 6. controller 추가.(A01_EmpController.java)
 	/insEmpForm.do

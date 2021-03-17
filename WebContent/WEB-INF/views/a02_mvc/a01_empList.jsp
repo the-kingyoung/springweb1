@@ -32,6 +32,7 @@
       $("#regBtn").click(function(){
     	  // 등록 컨트롤러 호출 
     	  location.href="${path}/insEmpForm.do";
+    	  // $(location).attr("href","${path}/insEmpForm.do");
       });
    });
 </script>
@@ -42,7 +43,9 @@
 <div class="container">
   <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
      <form:form modelAttribute="sch" class="form-inline" method="post">
-       <form:input path="ename" class="form-control mr-sm-2"  placeholder="사원명"/>
+       <form:input path="ename" class="form-control mr-sm-2" 
+        placeholder="사원명" style="width:30%;"/>
+       
        <form:select path="job" class="form-control mr-sm-2">
        		<option value="">직책선택</option>
        		<form:options items="${jobs }"/>

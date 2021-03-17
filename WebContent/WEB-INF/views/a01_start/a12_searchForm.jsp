@@ -55,6 +55,9 @@
 				<form:options items="${searchTypeList}" 
 				itemLabel="text" itemValue="code"/>
 			</form:select>
+			
+			
+			
 			<form:input path="query" class="form-control mr-sm-2"	placeholder="검색내용"/>
 		<button class="btn btn-success" type="submit">Search</button>
 	</form:form>

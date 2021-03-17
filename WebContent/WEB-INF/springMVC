@@ -209,6 +209,8 @@
 	<%@ taglib prefix="form"
 		uri="http://www.springframework.org/tags/form" %>
 	2) <form:form commandName="모델명"
+				  modelattribute="모델명"
+	
 		하위에 있는 요소들을 setXXX property와 연동하여 준다.
 			<form:input path="property명">
 		
@@ -217,8 +219,18 @@
 				<form:input path="empno">
 				==> <input type="text" id="empno" name="empno"
 						value="${emp.empno}"/>
-
-						
+				
+			select, checkbox, radio 옵션 중
+			% <c:forEach> 구문을 사용하지 않더라도 효과적으로 폼요소객체를 구현할 수 있다.
+			1) 레이블에 보이는 데이터와 전송되는 데이터가 동일할 경우
+				<option>사과</option>
+				 <form:options items="${모델어트리뷰트명}"/>
+				 
+			2) 레이블에 보이는 데이터와 전송되는 데이터가 다른 경우
+				key/value	<option value="ch01">사과</option>
+				<form:options items="${모델어트리뷰트명}" 
+				itemLabel="value값" itemValue="key값"/>
+				
 
 
 

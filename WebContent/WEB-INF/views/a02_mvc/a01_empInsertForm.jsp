@@ -37,7 +37,7 @@
 </div>
 <div class="container">
 	<%--
-	<form:form commandName="emp" action="${path}/insertEmp.do">
+	<form:form modelattribute="emp" action="${path}/insertEmp.do">
 		<table class="table table-hover">
 			<tbody>
 				<tr class="text-center">
@@ -47,50 +47,51 @@
 			</tbody>
 		</table>
 	</form:form>
+	ex) 사원정보 스프링 form태그 형식으로 변경 처리..
+		1) controller단 추가.
+		2) 화면 jsp단 form:@@ 형식으로 변경
 --%>
-	<form action="${path}/insertEmp.do" method="post">
+	<form:form modelAttribute="emp" action="${path}/insertEmp.do" method="post">
 		<table class="table table-hover">
 			<tbody>
 			<col width="50">
 			<col width="50">
 			<tr class="text-center">
 				<th class="table-success">사원명</th>
-				<td><input type="text" name="ename" class="form-control" /></td>
+				<td><form:input path="ename" class="form-control mr-sm-2"  /></td>
 			</tr>
+			
 			<tr class="text-center">
 				<th class="table-success">직책</th>
-				<td><select name="job" class="form-control mr-sm-2">
-						<option value="0">직책선택</option>
-						<c:forEach var="job" items="${jobs}">
-							<option>${job}</option>
-						</c:forEach>
-				</select></td>
+				<td>
+				<%--option에 대한 default 설명이나 항목이 필요없는 경우 --%> 
+				<form:select path="job" class="form-control mr-sm-2" 
+					items="${jobs}" />
+				</td>
 			</tr>
 			<tr class="text-center">
 				<th class="table-success">관리자</th>
-				<td><select name="mgr" class="form-control mr-sm-2">
-						<option value="0">관리자선택</option>
-						<c:forEach var="mgr" items="${mgrs}">
-							<option value="${mgr.mgr}">${mgr.ename}</option>
-						</c:forEach>
-				</select></td>
+				<td>
+					<%--option에 대한 default 설명이나 항목이 필요없는 경우
+					lebel과 value를 해당하는 객체의 property로 설정 --%> 
+					<form:select path="mgr"	class="form-control mr-sm-2" 
+						items="${mgrs}" itemLabel="ename" itemValue="mgr" />
+				</td>
 			</tr>
 			<tr class="text-center">
 				<th class="table-success">급여</th>
-				<td><input type="number" name="sal" class="form-control" /></td>
+				<td><form:input path="sal" class="form-control mr-sm-2"  /></td>
 			</tr>
 			<tr class="text-center">
 				<th class="table-success">보너스</th>
-				<td><input type="number" name="comm" class="form-control" /></td>
+				<td><form:input path="comm" class="form-control mr-sm-2"  /></td>
 			</tr>
 			<tr class="text-center">
 				<th class="table-success">부서번호</th>
-				<td><select name="deptno" class="form-control mr-sm-2">
-						<option value="0">부서선택</option>
-						<c:forEach var="dept" items="${depts}">
-							<option value="${dept.deptno}">${dept.dname}</option>
-						</c:forEach>
-				</select></td>
+				<td>
+				<form:select path="deptno" class="form-control mr-sm-2"
+						items="${depts}" itemLabel="dname" itemValue="deptno"/>
+				</td>
 			</tr>
 			<tr>
 				<td colspan="2" style="text-align:center">
@@ -98,7 +99,7 @@
 			</tr>
 			</tbody>
 		</table>
-	</form>
+	</form:form>
 </div>
 </body>
 </html>
