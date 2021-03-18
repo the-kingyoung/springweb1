@@ -6,6 +6,7 @@
 [클라이언트]
 1. http://localhost:7080/springweb/start.do url
 	http://ip주소/도메인명:7080/springweb/start.do url
+	?요청key=요청값(get방식 / post방식 name="요청key" value="요청값")
 	
 
 [서버]
@@ -16,37 +17,74 @@
 3. [설정]dispatcher-servlet.xml을 호출하여,
 	해당하는 컨테이너에 등록된 객체를 확인하고
 	메모리에 로딩된 객체를 찾는다.
-	controller/service/dao
-	context:component-scan basePackage=""
-	framework : mybatis(DB)
+	1) 전체적으로 특정정 패키지 기준으로 등록 : 사용자 정의 클래스 / 객체
+		context:component-scan basePackage=""
+	2) 추가적으로 필요한 framework - viewResolver
+		controller/service/dao
+		framework : mybatis(DB)
 	이중에서 requestMapping("/start.do")가 있는 controller
 	기능 메서드 찾기.
 	
-4. [controller]위에 등록된 객체 안에서 url패턴이 /start.do
+4. [controller:주소호출]위에 등록된 객체 안에서 url패턴이 /start.do
 	인것의 기능 메서드를 찾는다.
 	@RequestMapping("/start.do")
 	해당 controller의 기능 메서드를 수행시켜준다.
 
 5. [controller : 요청값처리]해당 기능 메서드에서 요청값과 model값 설정은 매개변수로 받을 수 있다.
+	?name=홍길동&age=25&loc=서울신림동
 	public String start(@RequestParam("name") String name, Model d)
 						Person s
 						@ModelAttribute("sch") Person s
+		ModelAttribute : 요청값을 받을 뿐만 아니라 모델데이터로 사용하기 위해서 활용된다.
+						+ spring의 form 태그
+						<form:form ModelAttribute="sch"로 선언하여
+							<form:input path="name"/>
+							==> <input id="name" name="name" value="${sch.name}"
 
 6. [controller : 모델데이터처리]해당 기능 메서드에 문자열로 리턴된 view단으로 화면이 호출된다.
+	model : MVC 중 하나로 화면/view 
 	public String start(Model d)
 	d.addObject)("모델key",모델객체);
 	모델객체 : Service --> Dao --> mybastis Framework --> DB Server
-	
+					 <--	 <--					<--
 7. [controller : view단 호출] 해당 기능 메서드에 문자열로 리턴된 view단으로
 	화면이 호출된다.	
-	return "jsp파일 위치";	forward/redirect
+	return "jsp파일 위치";	(forward방식을 기본으로 한다) 
+							 request/response(모델/요청/session)
+		return "forward	: /다른 url mapping ex) "forward:/emp.do"
+		return "redirect: /다른 url" : request/response 전달하지 않음
+		
 	ModelAndView : model + view
+		addObject(모델key, 모델값)
+		setViewName("뷰단 호출")
+		ex) public ModelAndView show(){
+				ModelAndView mav = new ModelAndView();
+				mav.addObject(key,value);
+				mav.setViewName("뷰단호출");
+				return mav;
+			}
+		return "pageJsonReport";
+			// container에서 선언된 bean으로 된 view 처리 방식(json)
 	
 8. [view]
-	${모델명.프로퍼터}	${emp.ename} == emp.getEname()
+	${모델명} : 한개의 변수
+		ex)
+		controller : m.setAttribute("greet","hello");
+		jsp ${greet}
+	${모델명.프로퍼터}	: 객체로 선언되어 있을 때.
+		ex)
+		controller : m.setAttribute("emp", service.getEmp(empno));
+		jsp:
+				${emp.ename} == emp.getEname()
 					cf) mybatis #{ename}
 					
-9. [설정]dispatcherServlet 최종으로 클라이언트 전달.
+	${배열형모델명}" : list형 객체 배열
+		ex)
+		controller : m.setAttribute("empList", service.getEmpList(sch));
+		jsp : <c:forEach var="emp" items="${empList}"
+					
+9. [설정] front controller인 DispatcherServlet 최종으로 클라이언트 전달.
+		 response 객체를 통해서 html코드를 전달
 	
 [클라이언트]
 10. 서버에서 만들어진 화면을 response객체로 전달되어 client에
@@ -87,12 +125,17 @@
 		
 	
 3. spring MVC
-	- Controller : java 클래스로 선언
+	- Controller : java 클래스로 선언 / 중재자 역할(요청, service전달/받기, 모델 데이터 선언, view단 호출)
 		controller --> service --> dao(인터페이스) ==> DB서버
-						비지니스 로직 처리
+	  <<요청값 전달>>	비지니스 로직 처리					select *
+	  												from
+	  												where empno = #{empno)
+	  												parameterXXXX
 						
-		controller <-- service <-- dao(실객체)
-						비지니스 로직 처리
+		controller <-- service <-- dao(실객체) <== DB서버
+		모델처리		비지니스 로직 처리				<<데이터베이스 처리 결과>>
+												select * 의 결과를 전송
+												resultXXXX
 	- Model : controller 안에 선언
 		화면단에 보내줄 핵심 데이터 처리
 		# model데이터를 만들기 위해 도와주는 process 객체들!!
