@@ -46,9 +46,13 @@
        <form:input path="ename" class="form-control mr-sm-2" 
         placeholder="사원명" style="width:30%;"/>
        
+       <%--
+       
+       ${sch.job}를 가져와서 select 증에 동일한 내용을 선태해 준다.
+        --%>
        <form:select path="job" class="form-control mr-sm-2">
        		<option value="">직책선택</option>
-       		<form:options items="${jobs }"/>
+       		<form:options items="${jobs}"/>
        </form:select>
        <button class="btn btn-success" type="submit">Search</button>&nbsp;
         <button class="btn btn-info" type="button" id="regBtn">사원등록</button>

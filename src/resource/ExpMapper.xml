@@ -73,4 +73,5 @@
 		FROM emp
 		WHERE to_char(hiredatem'YYYY')=#{year};
     </select>
+    
 </mapper>

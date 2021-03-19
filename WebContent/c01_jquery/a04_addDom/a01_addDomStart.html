@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" 
+   href="/jspexp/a00_com/a00_com.css">
+<script type="text/javascript" src="/jspexp/a00_com/jquery-3.5.1.js"></script>
+<script type="text/javascript">
+/* 
+# Dom 추가 처리하는 기능 함수들..
+1. .append("추가할 태그(DOM)")
+	ex) $("div").append("<h3>안녕하세요</h3>");
+	ex) $("div").append($("h2").text("반가워요"));
+2. 추가할태그나DOM.appendTo(추가할 대상객체)
+	ex) $("<h2>좋은날</h2>").appendTo("div");
+3. 요소객체.prepend("요소객체의 접두로 추가처리.")
+	"접두로 추가할 내용".prependTo(요소객체)
+
+*/
+//
+	$(document).ready(function(){
+		$("h2").text("추가처리 기능 함수들");
+		$("#appendFun").click(function(){
+			$(".inner").append("<span> 장군</span>");
+		});
+		$("#appendToFun").click(function(){
+			$("<span>영웅!!</span>").appendTo(".inner");
+		});
+		$("#prependFun").click(function(){
+			$(".inner").prepend("<span>멋진 </span>");
+		});
+		//ex) 테이블에 좋아요 버튼 클릭하면 오른쪽으로 파란색 배경색상 td 추가
+		//		싫어요 버튼 클릭하면 왼쪽에 빨간색 배경색상 td추가 처리..
+		//	[좋아요]	[싫어요]
+		//		[테이블]
+		$("#like").click(function(){
+			$("#tt").append($("<td>좋아요</td>").css({"color":"yellow","background-color":"blue"}));
+		});
+		$("#dislike").click(function(){
+			$("#tt").prepend($("<td>싫어요</td>").css({"color":"yellow","background-color":"red"}));
+		});
+	});
+</script>
+</head>
+<body>
+	<h2></h2>
+	<h4 id="appendFun">append처리</h4>
+	<h4 id="appendToFun">appendTo처리</h4>
+	<h4 id="prependFun">prepend처리</h4>
+	<h3>영웅들</h3>
+	<div class="container">
+		<div class="inner">이순신</div>
+		<div class="inner">강감찬</div>
+	</div>
+	
+	<input type="button" id="like" value="좋아요"/>
+	<input type="button" id="dislike" value="싫어요"/>
+	<table><tr id="tt"></tr></table>
+</body>

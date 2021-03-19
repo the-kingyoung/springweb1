@@ -87,7 +87,7 @@ ex4) SELECT max(sal)
 	
 */
 	
-	
+	public int schMember(String id);
 	
 	
 	

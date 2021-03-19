@@ -7,7 +7,7 @@
 	<select id="deptList" resultMap="deptMap" parameterType="dept">
 			select * 
 			from dept
-			where dname like '%'||#{dname}||'%'
-			and loc like '%'||#{loc}||'%'
+			where dname like '%'||upper(#{dname})||'%'
+			and loc like '%'||upper(#{loc})||'%'
 	</select>
 </mapper>

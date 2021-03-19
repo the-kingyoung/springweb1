@@ -36,6 +36,8 @@ public class A01_EmpController {
 	// RequestMapping("/insertEmp.do")
 	@PostMapping("/insertEmp.do")	// 5.0이후 post방식 전송 명시 처리
 	public String insertEmp(@ModelAttribute("emp") Emp ins) {
+		// ex) 직책을 선택했을 때, 다음 화면에 모델 어트리뷰트에서 선언한
+		//		여러 option 중에서 getJob()을 통해서 특정한 직책을 선택해준다.
 		System.out.println("# 등록 처리 : "+ins.getEname());
 		service.empInsert(ins);
 		ins = null;
@@ -56,7 +58,7 @@ public class A01_EmpController {
 	모델어트리뷰트를 공유한다.
 	*/
 	
-	@ModelAttribute("jobs")
+	@ModelAttribute("jobs") // 화면에 select option으로 리스트 데이터
 	public ArrayList<String> getJobs(){
 		return service.getJobs();
 	}

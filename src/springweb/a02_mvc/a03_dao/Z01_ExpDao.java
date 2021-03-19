@@ -3,6 +3,7 @@ package springweb.a02_mvc.a03_dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import jspexp.z01_vo.Member5;
 import springweb.z02_vo.Dept;
 import springweb.z02_vo.Emp;
 import springweb.z03_vo.EmpDept;
@@ -19,5 +20,9 @@ public interface Z01_ExpDao {
     public ArrayList<String> empMgrSch(String ename);
     public double empMaxSal(ArrayList<String> enames);
     public ArrayList<Emp> empSch5(String year);
+    
+    
+    
+
 	
 }

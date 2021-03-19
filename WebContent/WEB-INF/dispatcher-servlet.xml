@@ -92,6 +92,7 @@
 		접미어를 .jsp 설정하면
 		controller의 메서드의 리턴값으로 
 			return "a02_mvc\\a03_empDeptList";
+			
 		<property name="prefix" value="WEB-INF\\views"/>
 		<property name="suffix" value=".jsp"/>
 		-->

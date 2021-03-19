@@ -11,15 +11,22 @@
 			.eq(0), first(), .last()
 			.find(), children()
 		- 이벤트 처리
-			click, key, mouseover, mouseout
+			click, keyup, keydown, mouseover, mouseout
+			hover(함수1, 함수2) : 대상요소객체에 함수1로는 mouseover 했을 떄 처리
+				대상요소객체에 함수2로는 mouseout했을 때, 처리
 		- 화면 추가 처리
 			html(), text(), append(), wrap()
 		- 화면 controller
-			show()/hide
+			show()/hide(), toggleClass()
 		- 데이터 처리
-			filter(), map(), each().....
+			filter(함수 boolean 리턴), map(배열의 단위객체별로 데이터 처리), each(index, 단위객체, 배열).....
+		- 속성처리
+			.attr("기본속성", "속성값")
+			.css("css속성","css속성값")
+			ex) {속성:속성값, 속성2:속성2값, 속성3:속성3값...}
 	3) ajax처리
 		- backend(jsp/spring) 요청/반응에 의한 json데이터 처리
+			json데이터가 나올 수 있도록 환경 설정..
 		- 화면단에 연동하여 비동기적으로 jquery plugin에 연동하여 처리
 		- 처리 순서
 			plugin에 있는 핵심 json 데이터

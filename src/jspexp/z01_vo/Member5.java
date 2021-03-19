@@ -1,5 +1,5 @@
 package jspexp.z01_vo;
-
+//jspexp.z01_vo.Member5
 import java.util.Date;
 
 public class Member5 {
