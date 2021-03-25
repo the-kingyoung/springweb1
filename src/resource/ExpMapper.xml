@@ -73,5 +73,20 @@
 		FROM emp
 		WHERE to_char(hiredatem'YYYY')=#{year};
     </select>
+    <!-- public void insertFile(FileVo ins); -->
+    <resultMap type="filevo" id="fileMap"/>
+    <insert id="insertFile" parameterType="filevo">
+    	insert into fileexp values(#{content},#{fname})
+    </insert>
+    <!-- 
+    public ArrayList<FileVo> fileList()
+    column명과 property가 동일할 때, resultType으로도
+    ArrayList<VO> 처리 가능
+     -->
+    <select id="fileList" resultType="filevo">
+    	SELECT *
+    	FROM fileexp
+    	order by content
+    </select>
     
 </mapper>

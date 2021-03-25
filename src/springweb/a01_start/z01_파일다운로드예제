@@ -1,0 +1,32 @@
+# 파일다운로드 처리예제
+1. 등록된 파일의 리스트 처리
+	1) 내용과 파일명으로 리스트 처리.
+	
+	2) dao
+		// springweb.a02_mvc.a03_dao.Z01_ExpDao
+   		public ArrayList<FileVo> fileList();
+	3) XXXmapper.xml 선언
+	4) 서비스단 dao 호출
+	5) controller url 선언과 
+		모델명으로 서비스단 파일정보 호출
+	// http://localhost:7080/springweb/fileList.do
+	@GetMapping("fileList.do")
+	public String fileList(Model d) {
+		//파일 확인
+		d.addAttribute("fileList", service.fileList());
+	}
+	6) 화면단 list 처리
+	"WEB-INF\\views\\a01_start\\a16_fileList.jsp"
+		
+2. 파일 다운로드 viewer 작성
+	1) model명을 파일을 할당할 수 있는 key로 설정한다.
+3. 컨테이너에 파일 다운로드 viewer등록 처리
+	id="다운로드뷰이름"
+	<bean id="downloadviewer" 
+	class="springweb.z04_util.FileDownloadViewer"/>	
+4. 컨트롤러에서 파일명으로 요청값을 받아서 
+	1) 다운로드 파일명을 model명으로 설정
+		 다운로드 viewer의 model명과 동일하게 지정
+	2) return "컨테이너에서 선언한 다운로드뷰이름"
+5. 이벤트로 컨트롤러 url호출과 파일명 query String 으로 호출.
+
