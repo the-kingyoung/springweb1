@@ -30,3 +30,15 @@
 	2) return "컨테이너에서 선언한 다운로드뷰이름"
 5. 이벤트로 컨트롤러 url호출과 파일명 query String 으로 호출.
 
+# 파일 정보 수정과 파일 업로드
+1. jsp 뷰
+	1) 수정할 파일 정보를 fnames로 선언한다.(name=fnames)
+	2) 수정할 업로드 정보를 report로 선언한다.(name=report)
+2. VO 추가
+	private String[] fnames; 수정할 파일명 받기..
+3. sql작성
+4. dao 작성
+5. mapper 작성
+6. service단에서
+	업로드 및 파일정보 수정 처리..
+
