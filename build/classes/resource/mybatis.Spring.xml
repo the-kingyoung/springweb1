@@ -13,6 +13,7 @@
 		<typeAlias alias="empp" type="springweb.z03_vo.EmpPart"/>
 		<typeAlias alias="empdept" type="springweb.z03_vo.EmpDept"/>
 		<typeAlias alias="filevo" type="springweb.z03_vo.FileVo"/>
+		<typeAlias alias="calen" type="springweb.z02_vo.Calendar"/>
 		
 	</typeAliases>
 	<!-- 3. sql이 저장되는 mapper.xml 등록 
@@ -20,8 +21,9 @@
 	-->
 	<mappers>
 		<mapper resource="resource/EmpMapper.xml"/>
-		 <mapper resource="resource/ExpMapper.xml"/>
-		 <mapper resource="resource/DeptMapper.xml"/>
-		 <mapper resource="resource/AjaxMapper.xml"/>
+		<mapper resource="resource/ExpMapper.xml"/>
+		<mapper resource="resource/DeptMapper.xml"/>
+		<mapper resource="resource/AjaxMapper.xml"/>
+		<mapper resource="resource/CalenMapper.xml"/>
 	</mappers>
 </configuration>

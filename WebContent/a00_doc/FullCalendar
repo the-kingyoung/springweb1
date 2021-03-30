@@ -1,0 +1,127 @@
+# ajax를 활용한 fullcalendar plugin 활용하기
+1. spring에서 지원하는 json viewer를 이용하여,
+	backend단의 데이터를 fullcalendar api와 연동하여,
+	효과적인 calendar 데이터를 처리한다.
+2. 개발 순서
+	1) fullcalendar lib 다운로드
+	2) jsp 환경으로 front end단 lib호출 처리
+	3) fullcalendar api의 json데이터와 주요 핵심 기능 메서드 확인
+	4) 주요 기능 정의
+	5) fullcalendar 기본 sample 예제 및 api를 통해서,
+		json데이터를 테이블 구조로 변경하여 테이블 생성, sample데이터 입력
+	6) 사용하게될 sql 작성
+		- 조회
+		- 등록
+		- 수정
+		- 삭제
+	7) 해당 내용을 처리하기 위한 vo/dto 정의
+	8) sql 기반으로 하여 dao 작성
+	9) mybatis.spring.xml에 사용할 vo/dto alias 및 CalMapper.xml 등록
+	10) CalMapper.xml에서 작성한 dao와 연동 처리...
+	11) service작성 및 dao 호출
+	12) Controller 작성
+		- 초기 화면 호출
+		- ajax호출 기능메서드 구현
+			조회
+			등록
+			수정
+			삭제
+	13) view단에서 해당 데이터 list/수정/삭제 ajax 호출 처리
+	14) 각 기능별 기능 메서드 구현
+	
+# spring controller 통해서 초기 화면 처리.
+1. 스프링 controller / fullcalendar호출 화면만들기
+2. 필요한 lib 특정 위치에 복사 처리
+	WebContent\fullcalendar-5.6.0\lib 폴더를 복사
+	WebContent\a00_com에 위치시킨다.
+
+3. jsp에 해당 내용 controller 호출하여 보일 수 있게 처리.
+	WebContent\fullcalendar-5.6.0\examples\selectable.html
+	에 있는 내용을
+	WebContent\WEB-INF\views\a03_ajax\a04_fullcalendar.jsp
+	에 복사 처리한다.
+4. 초기 화면 호출.
+
+# fullcalendar api의 json데이터와 주요 핵심 기능 메서드 확인
+1. new FullCalendar.Calendar(calendarEl,{속성,속성값..});
+	1) calendarEl : 화면에 지정한 DOM객체
+	2) {속성,속성값..} : calendar에 활용할 속성들
+2. 주요 속성.
+	1) headerToolbar : 상단 타이틀 옵션 설정.
+	2) initialDate : 초기로딩 기준일
+	3) 주요 이벤트
+	 	형식 - 이벤트명 : function(){} : 각 날짜에 대한 이벤트를 통해 처리할 내용..
+	 	 select: function(arg) {}
+	 	 	없는 일정에 클릭이나, 시간을 클릭 후, 스크롤링 했을 때,
+	 	 	arg는 해당 날짜(시작/마지막/종일여부)
+			속성을 가져온다.
+			arg 객체의 속성들
+			arg.start : 선택한 시작 날짜
+			arg.end : 선택한 마지막 날짜
+			arg.allDay : 종일 일정여부
+			calendar.addEvent(추가할 일정을 json형식);
+			매개변수로 받은 일정을 화면에 반영하기 위한 일정 추가
+			이벤트 처리.
+			ex)
+			calendar.addEvent({
+	            title: title,
+	            start: arg.start,
+	            end: arg.end,
+	            allDay: arg.allDay
+			})
+		# eventClick : 현재 보이는 일정을 클릭시 처리 내용.	
+			eventClick: function(arg) {
+				# 있는 일정을 클릭시, arg.event에 있는 속성
+				allDay:true // 종일 여부 시간일때는 false
+				backgroundColor:"" // 배경색상
+				borderColor : "" // 테투리 색상
+				end : null // 마지막일
+				extendedProps : Object	//추가할 속성
+				groupId:(...) // 그룹으로 지정할 때..
+				id : "" // 식별자
+				start : Thu Apr 01 2021 00:00:00 GMT+0900(대한민국)
+				textColor:""//글자색
+				title : "All Day Event" // 보일 제목
+				url: "" // 링크할 url
+				arg.event.remove() : 기존 일정 삭제시 처리한
+				이벤트..화면에서 사라진다.
+	4) 화면에 리스트 되는 일정 json 형식으로 출력.
+		events: [
+		{
+    	  title:"일정추가^^",
+    	  start:"2021-04-02",
+	ex1) 등록시, 배경색상을 노란색, 글자 색상 파란색으로 처리
+	ex2) events에 json일정등록 제목은 수료일
+		글자색상은 노란색, 배경색상은 초록색으로 처리되게 하세요
+# 속성을 이용한 테이블 구조 만들기.
+id
+groupId
+title
+writer
+content
+start
+end
+allDay
+textColor
+backgroundColor
+borderColor
+
+create table calendar(
+	id number primary key,
+	groupId number,
+	title varchar2(50),
+	writer varchar2(50),
+	content varchar2(1000),
+	start1 date,
+	end1 date,
+	allDay number(1),
+	textColor varchar2(50),
+	backgroundColor varchar2(50),
+	borderColor varchar2(50)
+);
+create sequence cal_seq
+	start with 1
+	increment by 1
+	minvalue 1
+	maxvalue 9999999
+	no cycle;
