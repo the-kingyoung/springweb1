@@ -6,6 +6,19 @@
 <!-- 
 //	springweb.a02_mvc.a03_dao.A03_CalenDao
 	public ArrayList<Calendar> calenList();
+	
+		id				[DB]
+		groupId			[DB]
+		title			[입력]
+		writer			[입력]
+		content			[입력]
+		start			[full api]
+		end				[full api]
+		allDay			[full api]
+		textColor		[입력]
+		backgroundColor	[입력]
+		borderColor		[입력]
+	public void insertCalendar(Calendar ins);
  -->
 	<resultMap type="calen" id="calMap">
 		<result property="start" column="start1"/>
@@ -15,10 +28,18 @@
 		SELECT id,title,
 			to_char(start1,'YYYY-MM-DD"T"HH24:MM:SS') start1,
 			to_char(end1,'YYYY-MM-DD"T"HH24:MM:SS') end1,
+			writer,
+			content,
 			allDay,
 			textColor,
 			backgroundColor,
 			borderColor	
 		FROM calendar
 	</select>
+	<insert id="insertCalendar" parameterType="Calendar">
+		INSERT INTO calendar values(cal_seq.nextval, '',
+		'4월을 시작','마길동','내용',
+		to_date(#{start},'YYYY-MM-DD"T"HH24:MM:SS'),
+		to_date(#{end},'YYYY-MM-DD"T"HH24:MM:SS'),1,'navy','pink','pink')
+	</insert>
 </mapper>

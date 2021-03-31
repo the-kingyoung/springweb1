@@ -14,7 +14,6 @@
 		<typeAlias alias="empdept" type="springweb.z03_vo.EmpDept"/>
 		<typeAlias alias="filevo" type="springweb.z03_vo.FileVo"/>
 		<typeAlias alias="calen" type="springweb.z02_vo.Calendar"/>
-		
 	</typeAliases>
 	<!-- 3. sql이 저장되는 mapper.xml 등록 
 		 4. 주로 업무단위 dao단위 하나의 mapper.xml을 만든다.	 

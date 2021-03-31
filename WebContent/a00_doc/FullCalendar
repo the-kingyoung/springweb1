@@ -1,12 +1,12 @@
 # ajax를 활용한 fullcalendar plugin 활용하기
 1. spring에서 지원하는 json viewer를 이용하여,
 	backend단의 데이터를 fullcalendar api와 연동하여,
-	효과적인 calendar 데이터를 처리한다.
+	효과적인 calendar 데이터를 js lib를 통하여 처리한다.
 2. 개발 순서
 	1) fullcalendar lib 다운로드
 	2) jsp 환경으로 front end단 lib호출 처리
 	3) fullcalendar api의 json데이터와 주요 핵심 기능 메서드 확인
-	4) 주요 기능 정의
+	4) 주요 기능 정의 : 리스트 처리, 초기 등록, 수정변경, 삭제
 	5) fullcalendar 기본 sample 예제 및 api를 통해서,
 		json데이터를 테이블 구조로 변경하여 테이블 생성, sample데이터 입력
 	6) 사용하게될 sql 작성
@@ -41,6 +41,7 @@
 	WebContent\WEB-INF\views\a03_ajax\a04_fullcalendar.jsp
 	에 복사 처리한다.
 4. 초기 화면 호출.
+	controller의 url mapping을 통해서 호출
 
 # fullcalendar api의 json데이터와 주요 핵심 기능 메서드 확인
 1. new FullCalendar.Calendar(calendarEl,{속성,속성값..});
@@ -56,9 +57,9 @@
 	 	 	arg는 해당 날짜(시작/마지막/종일여부)
 			속성을 가져온다.
 			arg 객체의 속성들
-			arg.start : 선택한 시작 날짜
-			arg.end : 선택한 마지막 날짜
-			arg.allDay : 종일 일정여부
+			arg.start : 선택한 시작 날짜(new Date()객체)
+			arg.end : 선택한 마지막 날짜(new Date()객체)
+			arg.allDay : 종일 일정여부(날짜/시간) boolean
 			calendar.addEvent(추가할 일정을 json형식);
 			매개변수로 받은 일정을 화면에 반영하기 위한 일정 추가
 			이벤트 처리.
@@ -125,3 +126,96 @@ create sequence cal_seq
 	minvalue 1
 	maxvalue 9999999
 	no cycle;
+	
+	
+# 캘린더 등록 처리.
+1. 화면 처리 방식 결정
+	1) 등록할 속성값 지정
+		id				[DB]
+		groupId			[DB]
+		title			[입력]
+		writer			[입력]
+		content			[입력]
+		start			[full api]
+		end				[full api]
+		allDay			[full api]
+		textColor		[입력]
+		backgroundColor	[입력]
+		borderColor		[입력]
+	2) 등록할 화면 로딩(dialogue-jquery ui/bootstrap 으로 처리)
+		위에 있는 입력값을 
+		ex1) form에 넣고, jquery ui dialogue 화면처리..
+		ex2) form에 넣고, bootstrap으로 dialogue 화면처리..
+		1) 기본 화면 구성
+				<div id="schDialog" title="일정">
+					<form id="frm">
+						<input name="id" type="hidden" value="0"/>
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text">제목</span>
+							</div>
+							<input class="form-control" name="title" type="text"/>
+				</div>
+		2) css 설정
+			주의 다른 css 호출의 마지막 부분에 설정.
+		<style type="text/css">
+			input[type=text], select, label, textarea{
+				margin-bottom:12px;padding: .4em;width:95%;
+			}
+			.input-group-text{
+				width:100%;text-align:center;background-color:linen;color:black;font-weight:bolder;}
+			.input-group-prepend{width:35%;}
+		</style>
+		3) jquery 설정.. : button의 기능에 따른 동적 처리..
+			- 기본 옵션으로 dialogue 설정.
+			document.addEventListener('DOMContentLoaded', function() {
+			var opts={
+				autoOpen:false,	// 초기에 로딩하지 않게 처리
+				width:"350px",
+				modal:true		// 입력시 그 외 화면처리는 비활성화 처리.
+			}
+			$("#schDialog").dialog(opts);
+			
+			- 등록 처리할 때, 등록 버튼이 추가된 dialogue 설정 및 open
+			      select: function(arg) {
+		    	  opts.buttons={
+						"등록":function(){
+							
+						}
+		    	  };
+		    	  $("#schDialog").dialog(opts);
+		    	  $("#schDialog").dialog("open");
+		    	  // $("#btn01").click();
+		    	  $("[name=start]").val(arg.start.toLocaleString());
+		    	  $("[name=end]").val(arg.end.toLocaleString());
+		    	  $("[name=allDay]").val(""+arg.allDay);
+	
+	
+	3) 등록 버튼 클릭시,  ajax 처리..
+		"등록":function(){}
+		부분에 등록 버튼 클릭시, 처리할 ajax를 선언합니다.
+		- 우선, 전달할 데이터를 json형식으로 정리
+		- calendar.addEvent(추가할 json 데이터) : 화면 반영
+		- $.ajax();를 통해서 서버에 요청값으로 전달.
+	
+	
+	
+	4) controller단 호출 및 작성.
+2. SQL 작성
+	1) 등록
+	INSERT INTO calendar values(cal_seq.nextval, '',
+	'4월을 시작','마길동','내용',
+	to_date(#{start},'YYYY-MM-DD"T"HH24:MM:SS'),
+	to_date(#{end},'YYYY-MM-DD"T"HH24:MM:SS'),1,'navy','pink','pink');
+	
+	
+	
+3. sql에 맞는 vo 확인
+4. dao 작성
+	public void insertCalendar(Calendar ins);
+5. mapper.xml 작성
+6. service 작성
+7. controller 호출 service 처리..
+	/calendar.do?method=insert
+8. 화면단 ajax처리
+	
