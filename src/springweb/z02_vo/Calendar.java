@@ -4,18 +4,16 @@ import java.util.Date;
 // springweb.z02_vo.Calendar
 public class Calendar {
 	private int id;
-//	groupId가 null로 있는 경우 수정시 bug발생
+	// groupId가 null로 있는 경우 수정 시 bug 발생 
 //	private String groupId;
 	private String title;
 	private String writer;
 	private String content;
-	
 	private String start;
 	private String end;
-	/*
-	private Date start;
-	private Date end;
-	*/
+	
+//	private Date start;
+//	private Date end;
 	private boolean allDay;
 	private String textColor;
 	private String backgroundColor;
@@ -26,6 +24,8 @@ public class Calendar {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	
 //	public String getGroupId() {
 //		return groupId;
 //	}
@@ -50,20 +50,23 @@ public class Calendar {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	/*
-	public Date getStart() {
-		return start;
+//	public Date getStart() {
+//		return start;
+//	}
+//	public void setStart(Date start) {
+//		this.start = start;
+//	}
+//	public Date getEnd() {
+//		return end;
+//	}
+//	public void setEnd(Date end) {
+//		this.end = end;
+//	}
+	
+	
+	public boolean isAllDay() {
+		return allDay;
 	}
-	public void setStart(Date start) {
-		this.start = start;
-	}
-	public Date getEnd() {
-		return end;
-	}
-	public void setEnd(Date end) {
-		this.end = end;
-	}
-	*/
 	public String getStart() {
 		return start;
 	}
@@ -75,9 +78,6 @@ public class Calendar {
 	}
 	public void setEnd(String end) {
 		this.end = end;
-	}
-	public boolean isAllDay() {
-		return allDay;
 	}
 	public void setAllDay(boolean allDay) {
 		this.allDay = allDay;
@@ -100,5 +100,6 @@ public class Calendar {
 	public void setBorderColor(String borderColor) {
 		this.borderColor = borderColor;
 	}
+	
 	
 }

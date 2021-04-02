@@ -2,58 +2,44 @@
 <!DOCTYPE mapper
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
 <mapper namespace="springweb.a02_mvc.a03_dao.A04_CalenDao">
-<!-- 
-//	springweb.a02_mvc.a03_dao.A03_CalenDao
-	public ArrayList<Calendar> calenList();
-		id				[DB]
-		groupId			[DB]
-		title			[입력]
-		writer			[입력]
-		content			[입력]
-		start			[full api]
-		end				[full api]
-		allDay			[full api]
-		textColor		[입력]
-		backgroundColor	[입력]
-		borderColor		[입력]
-	public void insertCalendar(Calendar ins);
-	public void updateCalen(Calendar upt);
-	public void deleteCalen(int id);
- -->
+	<!-- public ArrayList<Calendar> calenList(); -->
 	<resultMap type="calen" id="calMap">
 		<result property="start" column="start1"/>
 		<result property="end" column="end1"/>
 	</resultMap>
 	<select id="calenList" resultMap="calMap">
-		select *
-		from calendar
+		select * from calendar 
 	</select>
+	
+	<!-- INSERT INTO calendar values(cal_seq.nextval,'','일정등록시작','홍길동','내용',to_date('2021/04/01','YYYY/MM/DD'),to_date('2021/04/02','YYYY/MM/DD'),1,'yellow','navy','navy') -->
+	<!--   public void insertCalendar(Calendar ins); -->
+	<!--  groupId : 따로 id를 sequence로 mapping 처리 
+		반복 처리 일정이 나오면 같은 groupId로 설정  -->
 	<insert id="insertCalendar" parameterType="calen">
-		INSERT INTO calendar values(cal_seq.nextval,'',
-		#{title},#{writer},#{content},
-		#{start},
-		#{end}, 
-		#{allDay}, #{textColor},#{backgroundColor},#{borderColor})
+		INSERT INTO calendar values(cal_seq.nextval,cal_seq.currval,
+			#{title},#{writer},#{content},
+			#{start},#{end},#{allDay},#{textColor},
+			#{backgroundColor},#{borderColor})
 	</insert>
+	
+	<!-- public void updateCalen(Calendar upt); -->
 	<update id="updateCalen" parameterType="calen">
-	update calendar
-		set title =#{title},
-			start1 = #{start},
-			end1 = #{end},
-			content=#{content},
-			backgroundcolor=#{backgroundColor},
-			bordercolor=#{borderColor},
-			textcolor=#{textColor},
-			allday=#{allDay}
-	where id=#{id}
+		update calendar 
+			set title=#{title},
+				start1 = #{start},
+				end1=#{end},
+				content=#{content},
+				backgroundColor=#{backgroundColor},
+				borderColor=#{borderColor},
+				textColor=#{textColor},
+				allDay=#{allDay}
+			where id =#{id}
 	</update>
+	<!-- public void deleteCalen(int id);  -->
 	<delete id="deleteCalen" parameterType="int">
-		delete
-		from calendar
-		where id=''
+		delete from calendar 
+		where id=#{id}
 	</delete>
-	
-	
-	
 </mapper>

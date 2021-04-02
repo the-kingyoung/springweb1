@@ -2,6 +2,10 @@
 <!DOCTYPE mapper
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+	
+<!-- 	public ArrayList<Dept> deptList(Dept sch); 
+		springweb.a02_mvc.a03_dao.A02_DeptDao		-->
+		
 <mapper namespace="springweb.a02_mvc.a03_dao.A02_DeptDao">
 	<resultMap type="dept" id="deptMap"/>
 	<select id="deptList" resultMap="deptMap" parameterType="dept">

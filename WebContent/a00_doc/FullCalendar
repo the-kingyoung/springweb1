@@ -326,3 +326,13 @@ create sequence cal_seq
 	2) 날짜관련 내용은 ISO형식으로 변경시킨다.
 	3) ajax로 수정 처리한다.
 	
+2. 수정 데이터 변경 처리
+	1) 기존 데이터에서 sch객체 해당 요청값으로 변경 데이터를 처리한다..
+		var sc={};
+		sch.title=arg.event.title;
+		sch.start=arg.event.start.toISOString();
+		sch.end=arg.event.end.toISOString();
+		sch.content=arg.event.content;
+		sch.backgroundColor=arg.event.backgroundColor;
+		sch.borderColor=arg.event.borderColor;
+		sch.allDay=arg.event.allDay;
