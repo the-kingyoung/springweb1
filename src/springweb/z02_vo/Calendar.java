@@ -4,10 +4,12 @@ import java.util.Date;
 // springweb.z02_vo.Calendar
 public class Calendar {
 	private int id;
-	private String groupId;
+//	groupId가 null로 있는 경우 수정시 bug발생
+//	private String groupId;
 	private String title;
 	private String writer;
 	private String content;
+	
 	private String start;
 	private String end;
 	/*
@@ -24,12 +26,12 @@ public class Calendar {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getGroupId() {
-		return groupId;
-	}
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
-	}
+//	public String getGroupId() {
+//		return groupId;
+//	}
+//	public void setGroupId(String groupId) {
+//		this.groupId = groupId;
+//	}
 	public String getTitle() {
 		return title;
 	}

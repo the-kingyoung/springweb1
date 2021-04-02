@@ -120,6 +120,24 @@ create table calendar(
 	backgroundColor varchar2(50),
 	borderColor varchar2(50)
 );
+
+	drop table calendar;
+	create table calendar(
+		id number primary key,
+		groupId number,
+		title varchar2(50),
+		writer varchar2(50),
+		content varchar2(1000),
+		start1 varchar2(50),
+		end1 varchar2(50),
+		allDay number(1),
+		textColor varchar2(50),
+		backgroundColor varchar2(50),
+		borderColor varchar2(50)
+	);
+	// start1 date : 조회/상세읽기(o)	등록/수정/삭제 => bug toISOString()
+	//
+
 create sequence cal_seq
 	start with 1
 	increment by 1
@@ -172,9 +190,16 @@ create sequence cal_seq
 			var opts={
 				autoOpen:false,	// 초기에 로딩하지 않게 처리
 				width:"350px",
-				modal:true		// 입력시 그 외 화면처리는 비활성화 처리.
+				modal:true	// popup창시, 다른 요소객체 비활성화 처리.		// 입력시 그 외 화면처리는 비활성화 처리.
+				buttons:{
+					"버튼명":function(){},
+					"버튼명2":function(){}					
+				}
 			}
 			$("#schDialog").dialog(opts);
+			// 다이얼로그를 사용할 준비..
+			// $("#schDialog").dialog("open"); 다이얼로그 로딩
+			// $("#schDialog").dialog("close"); 다이얼로그 창닫기
 			
 			- 등록 처리할 때, 등록 버튼이 추가된 dialogue 설정 및 open
 			      select: function(arg) {
@@ -183,11 +208,18 @@ create sequence cal_seq
 							
 						}
 		    	  };
+		    	  // 등록 버튼을 클릭시, 옵션을 다시 처리.
 		    	  $("#schDialog").dialog(opts);
 		    	  $("#schDialog").dialog("open");
 		    	  // $("#btn01").click();
+		    	  // arg를 받은 기본 속성값으로 특정한 form요소객체의 값을 
+		    	  // 설정 해준다.
+		    	  // 날짜/시간을 클릭하거나 드래그한 날짜 시간으로,
+		    	  //		Date()객체.toLocaleString() : 서울 기준으로
+		    	  //		날짜 출력 형식 처리..(GMT)
 		    	  $("[name=start]").val(arg.start.toLocaleString());
 		    	  $("[name=end]").val(arg.end.toLocaleString());
+		    	  // 
 		    	  $("[name=allDay]").val(""+arg.allDay);
 	
 	
@@ -203,11 +235,12 @@ create sequence cal_seq
 	4) controller단 호출 및 작성.
 2. SQL 작성
 	1) 등록
-	INSERT INTO calendar values(cal_seq.nextval, '',
-	'4월을 시작','마길동','내용',
-	to_date(#{start},'YYYY-MM-DD"T"HH24:MM:SS'),
-	to_date(#{end},'YYYY-MM-DD"T"HH24:MM:SS'),1,'navy','pink','pink');
-	
+		INSERT INTO calendar values(cal_seq.nextval, '',
+		#{title},#{writer},#{content},
+		#{start},
+		#{end}, #{allDay}, #{textColor},#{backgroundColor},
+		#{borderColor})
+		
 	
 	
 3. sql에 맞는 vo 확인
@@ -218,4 +251,78 @@ create sequence cal_seq
 7. controller 호출 service 처리..
 	/calendar.do?method=insert
 8. 화면단 ajax처리
+	1) 날짜에 대한 부분을 입력 클릭시, 가져온다.
+		클릭시, 시작날짜와 종료날짜 객체를 전역변수에 할당.
+	2) 입력버튼 클릭시,
+		날짜 ==> ISOString형식으로 변환하여 화면과 DB에 전송
+	3) ajax처리
+	
+	
+		$.ajax({
+			data:sch,
+			success:function(data){
+				if(data.success=="Y"){
+					alert("등록 성공");
+				}
+			});
+			
+# 캘린더 상세화면 처리.
+1. 캘린더는 초기에 list할 때, 캘린더의 각 상세정보 데이터까지, 각 일정마다
+가지고 있다. 해당 내용 클릭시, 내부적으로 속성값을 호출해서, 원하는 화면 UI를
+통해서 출력하면 된다.
+2. 프로그래밍
+	1) 클릭시, 처리되는 매개변수를 통해서 일정을 가져와서
+	2) dialogue로 처리되는 div의 form하위 요소의 값에 할당 처리
+	3) 상세이기 때문에 dialogue 버튼 옵션을 수정/삭제 버튼으로 처리한다.
+	
+# 캘린더 수정/삭제 처리.
+1. 수정 삭제 sql 작성.
+	update calendar
+		set title ='',
+			start1 = '',
+			end1 = '',
+			content='',
+			backgroundcolor='',
+			bordercolor='',
+			textcolor='',
+			allday=''
+		where id='';
+	delete
+	from calendar
+	where id='';
+	
+2. dao/mapper작성
+	public void updateCalen(Calendar upt);
+	public void deleteCalen(int id);
+	
+3. service/controller 호출.
+4. controller 기능 메서드 선언
+	method=update
+	method=delete
+	--------------------------------
+5. 화면단 (event시 처리)
+	# 화면처리(캘린더 내부 api 처리)
+	# ajax 처리(DB처리) - 
+	0) 수정 이벤트 확인
+		상세 화면 수정
+		drag and drop 수정(날짜와 시간 변경)
+		resize 수정(시간 변경)
+		
+	1) 수정 클릭시..
+		입력 내용 변경된 부분을 json데이터로 가져오기.
+		# 화면 변경
+		현재 이벤트를 데이터를 id값으로 가져와서
+		setPop를 통해 변경
+		# ajax 처리
+		
+	2) 삭제 클릭시..
+
+# drag and drop 수정 (날짜와 시간 변경)
+	resize 수정 (시간 변경)
+1. arg값을 가져와서 변경값을
+	0) 기존 수정 ajax처리와 모듈을 활용하기 위하여 parameter 처리로
+		ajax 요청값을 변경한다.
+	1) arg.event로 변경 속성을 가져온다.
+	2) 날짜관련 내용은 ISO형식으로 변경시킨다.
+	3) ajax로 수정 처리한다.
 	

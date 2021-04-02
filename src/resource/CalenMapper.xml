@@ -6,7 +6,6 @@
 <!-- 
 //	springweb.a02_mvc.a03_dao.A03_CalenDao
 	public ArrayList<Calendar> calenList();
-	
 		id				[DB]
 		groupId			[DB]
 		title			[입력]
@@ -19,27 +18,42 @@
 		backgroundColor	[입력]
 		borderColor		[입력]
 	public void insertCalendar(Calendar ins);
+	public void updateCalen(Calendar upt);
+	public void deleteCalen(int id);
  -->
 	<resultMap type="calen" id="calMap">
 		<result property="start" column="start1"/>
 		<result property="end" column="end1"/>
 	</resultMap>
 	<select id="calenList" resultMap="calMap">
-		SELECT id,title,
-			to_char(start1,'YYYY-MM-DD"T"HH24:MM:SS') start1,
-			to_char(end1,'YYYY-MM-DD"T"HH24:MM:SS') end1,
-			writer,
-			content,
-			allDay,
-			textColor,
-			backgroundColor,
-			borderColor	
-		FROM calendar
+		select *
+		from calendar
 	</select>
-	<insert id="insertCalendar" parameterType="Calendar">
-		INSERT INTO calendar values(cal_seq.nextval, '',
-		'4월을 시작','마길동','내용',
-		to_date(#{start},'YYYY-MM-DD"T"HH24:MM:SS'),
-		to_date(#{end},'YYYY-MM-DD"T"HH24:MM:SS'),1,'navy','pink','pink')
+	<insert id="insertCalendar" parameterType="calen">
+		INSERT INTO calendar values(cal_seq.nextval,'',
+		#{title},#{writer},#{content},
+		#{start},
+		#{end}, 
+		#{allDay}, #{textColor},#{backgroundColor},#{borderColor})
 	</insert>
+	<update id="updateCalen" parameterType="calen">
+	update calendar
+		set title =#{title},
+			start1 = #{start},
+			end1 = #{end},
+			content=#{content},
+			backgroundcolor=#{backgroundColor},
+			bordercolor=#{borderColor},
+			textcolor=#{textColor},
+			allday=#{allDay}
+	where id=#{id}
+	</update>
+	<delete id="deleteCalen" parameterType="int">
+		delete
+		from calendar
+		where id=''
+	</delete>
+	
+	
+	
 </mapper>
