@@ -112,10 +112,16 @@ document.addEventListener('DOMContentLoaded', function() {
 			// 클릭한 날짜를 전역변수(date)에 할당 / 시작일과 마지막을 date형식으로 할당
 			$("[name=start]").val(arg.start.toLocaleString());
 			$("[name=end]").val(arg.end.toLocaleString());
+			//화면에 보이는 날짜는 한국 표현식으로 처리..
+			$("[name=start]").val(arg.start.toLocaleString());
+			$("[name=end]").val(arg.end.toLocaleString());			
 			// #ccffff #0099cc #0099cc
-	
+			// all.Day는 boolean값이기에 select의 선택형식에 맞게
+			// 처리하려면 ""+형식으로 문자열 처리가 필요하다
 			$("[name=allDay]").val("" + arg.allDay);
+			// 등록버튼이 있는 dialog옵션 설정
 			$( "#schDialog" ).dialog(opts);
+			// 
 			$( "#schDialog" ).dialog("open");
 		},
 		eventDrop:function(arg){
@@ -233,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	calendar.render();
 });
-
+//form 하위 요소객체에서 사용할 데이터를 json 형식을 만들어 준다.
 	function callSch(){
 		var sch = {};
 		sch.id = $("[name=id]").val();
@@ -242,6 +248,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		sch.content = $("[name=content]").val();
 		/* Date타입은 화면에서 사용되는 형식으로 설정해야 한다.
 			전역변수에 할당한 date.start//date.end의 ISO형태로 속성 할당.
+			
+			?? calendar api에서 사용되는 날짜 처리 방식이 ISO문자열 형식이기
+			때문이다.		ex) Date ==> toISOString() 형식
 		*/
 		sch.start = date.start.toISOString();
 		sch.end = date.end.toISOString();
@@ -265,6 +274,11 @@ document.addEventListener('DOMContentLoaded', function() {
 		$("[name=id]").val(event.id);
 		$("[name=title]").val(event.title);
 		// calendar에서 추가된 속성들..
+		/*
+		ex) event.extendedProps
+		calendar api 자체에서 지원되는 기본적인 속성이 아니고,
+		사용자에 의해서 DB 관리가 필요한 속성을 처리할 때, 사용된다.
+		*/
 		var exProps = event.extendedProps;
 		$("[name=writer]").val(exProps.writer);
 		$("[name=content]").val(exProps.content);

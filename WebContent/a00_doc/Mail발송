@@ -5,6 +5,7 @@
 		SMTP : 메일 발송을 위한 서버
 		==> gmail/naver/daum에서 사용된 서버 차용
 		보안 설정 부분 변경.	==> 계정관리->보안->보안수준이 낮은 엑세스 사용안함.
+		==> 해당 사이트에서 설정 처리..
 		
 	2) 스프링에서 메일 발송을 위한 객체 등록(container)
 		org.springframework.mail.javamail.JavaMailSenderImpl
@@ -12,7 +13,6 @@
 		- port 등록 587
 		- 계정/비번 : rladudgk1922@gmail.com/비번
 		- 보안 관련 설정.
-
 2. 프로그래밍 처리 내용
 	1) 발송할 수 있는 초기 화면 호출
 		controller, view단 구현
@@ -23,4 +23,7 @@
 		- 요청값과 container에서 선언된 JavaMailSender 객체 호출..
 		- 제목/수신자/내용을 요청값으로 받아 JavaMailSender로 전송 처리.
 		- 끝..
+3. 활용 예제
+	1) 비번호 발송
+	2) 회사계정 생성 후, 등록한 메일로 ID/임시비번 발송..
 

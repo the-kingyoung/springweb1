@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/springweb/a00_com/a00_com.css">
+<script type="text/javascript" src="/springweb/a00_com/jquery-3.5.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript">
+/* 
+물건명	가격		갯수		계
+@@@		[  ]	[  ]	@@@
+@@@		[  ]	[  ]	@@@
+@@@		[  ]	[  ]	@@@
+	총계 @@@
+v-model을 이용해서 단위 계와 총계가 출력되게 하세요.
+*/
+//
+	$(document).ready(function(){
+		var vm = new Vue({
+			el:"#show",
+			data:{price1:0, cnt1:0, price2:0, cnt2:0, price3:0, cnt3:0}
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="show">
+	<table>
+		<tr><th>물건명</th><th>가격</th><th>갯수</th><th>계</th></tr>
+		<tr><td>사과</td><td><input v-model="price1"/></td><td><input v-model="cnt1"/></td><td><input v-model="price1*cnt1"/></td></tr>
+		<tr><td>바나나</td><td><input v-model="price2"/></td><td><input v-model="cnt2"/></td><td><input v-model="price2*cnt2"/></td></tr>
+		<tr><td>딸기</td><td><input v-model="price3"/></td><td><input v-model="cnt3"/></td><td><input v-model="price3*cnt3"/></td></tr>
+		<tr><td colspan="2">총계</td><td colspan="2">{{price1*cnt1+price2*cnt2+price3*cnt3}}</td></tr>
+	</table>
+	</div>
+</body>

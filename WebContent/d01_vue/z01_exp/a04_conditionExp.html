@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/springweb/a00_com/bootstrap.min.css" >
+<script type="text/javascript" src="/springweb/a00_com/jquery-3.5.1.js"></script>
+<script src="/springweb/a00_com/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript">
+/* 
+
+*/
+//
+	$(document).ready(function(){
+		var vm = new Vue({
+			el:".container",
+			data:{
+				title:"연습",
+				score:"0"
+			}
+		});      
+	});
+</script>
+</head>
+<body>
+<div class="container">
+	<div class="jumbotron text-center">
+		<h2>{{title}}</h2>
+	</div>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+	<form class="form-inline" method="post">
+		<input class="form-control mr-sm-2" type="text" 
+			v-model="score">
+	</form>
+	</nav>
+	<table class="table table-hover table-striped">
+	<thead>
+		<tr class="table-success text-center">
+			<th>점수</th>
+			<th>등급</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="text-center">
+		<!-- 선언된 model의 데이터에 따라서 출력할 내용을 다르게 처리 -->
+			<td>{{score}}</td>
+			<td v-if="score>=95">A</td>
+			<td v-else-if="score>=85">B</td>
+			<td v-else-if="score>=75">C</td>
+			<td v-else-if="score>=65">D</td>
+			<td v-else>F</td>
+		</tr>
+	</tbody>
+	</table>    
+</div>
+</body>
