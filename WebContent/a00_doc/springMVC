@@ -283,8 +283,141 @@
 			   			key/value 형식의 리스트
 
 
+# 스프링 MVC로 개발하기..
+1. 요구사항
+	1) 리스트 처리
+	2) 상세화면
+	3) js(간트/데시보드)
+2. 화면설계
+3. 출력할 데이터를 DB를 설계한다.
+	1) 테이블 구성
+		- ERD 작성
+		화면에는 하나의 리스트나 입력내용이 나오지만,
+		데이터의 무결성과 효율성으로 테이블이 나누어지는 경우가 있다.
+		==> 조원들과 공유 및 협의를 통해서 처리.
+4. 출력할 sql 작성
+	1) 테이블 하나로 처리가 가능할 때. 
+		select * from 테이블
+	
+	2) 여러개의 테이블을 조인해야할 필요가 있을 때.
+		조인 조건을 기준으로 데이터를 처리..
+		select e.*, d.dname, d.loc
+		from emp e, dept d
+		where e.deptno = d.deptno;
+	3) 입력/수정/삭제
+5. 위에 출력한 내용과 조건을 기준으로 VO/DTO를 작성.
+	1) 테이블 기준으로 VO작성하는 것이 아니라, sql의 select나
+		insert, update, delete의 사용될 데이터를 기준으로
+		vo를 작성하여야 한다.
+6. 초기화면 구현
+	1) Controller
+	@RequestMapping("/empDeptList.do")
+		url맵핑을 통해서 화면이 나오게 처리.
+	2) View - 초기 html css 구현.
+7. controller의 처리
+	public String empDeptList(@ModelAttribute("sch") EmpDept sch(요청값처리), Model d) { (모델데이터 선언.)
+	d.addAttribute("empDeptList", service.schEDGList(sch));
+	
 
 
+
+	1) 요청값(받는 데이터) - client ==> server
+			ex) 사원정보를 조회시 사원명[	] 직책[	]
+			ex) 회원등록시, 회원정보 id[	] pas[	] 이름[	]
+		모델데이터(화면에서 서버에서 받은 데이터 처리/화면에 전달할 데이터) 설정
+		- server ==> client
+			ex) 사원 정보 리스트
+			ex) 상세 정보
+			ex) ajax의 경우 json 데이터
+	2) 요청값이 무엇인지 판단 : 조회의 조건, 등록, 수정, 삭제...
+		- query string : 컨트롤러의 url?요청키=요청값&요청키=요청값
+		- form 하위에 name="요청키" value="요청값"
+		- location.href="컨트롤러?요청키=요청값";
+	3) 요청값을 controller의 메서드에 매개변수로
+		- @RequestParam("요청키") String 받는 요청값;
+		- @RequestParam("요청키") int 받는 요청값;
+		- VO 객체를 통해서 받을 수 있게 처리..
+			set요청키 : property 개념..
+			ex) public String insert(Emp ins){}
+	4) 모델데이터 처리(dao, mapper.xml에서 처리 후 진행한다.)
+		- 기능메서드의 매개변수 
+			public String list(Emp sch, Model d){}
+		- 화면에 전달할 핵심 데이터를 설정..
+			d.addAttribute("key", 전달객체);
+	5) 요청값 + 모델 : @ModelAttribute로 처리
+	6) 모델+view : ModelAndView 객체로 처리..
+8. 데이터 처리
+	1) sql을 확인하고, 입력(조회 조건, insert, update, delete),
+		출력(select 이후에 출력할 컬럼리스트) 판단하여 VO에 할당하여,
+		VO 작성 확인 후,
+	2) dao에 작성		public 리턴할객체  메서드명(입력할 객체);
+		ex) public ArrayList<Emp> empList(Emp sch);
+	3) 공통할당할 VO의 alias선언과 XXXMapper.xml
+		resource\mybatis.Spring.xml
+	4) XXXMapper.xml을 활용하여
+		결과값 선언 : resultMap, 입력값 : parameterType
+		<select
+9. Autowired를 통한 service단 선언과 dao 호출,
+	controller에서 service단 호출과 model데이터를 설정 처리.
+		d.addAttribute("모델명", service.empList(sch));
+	1) service에서 요청값을 변경하거나, 모델데이터를 수정처리할 때, 
+		처리를 한다.
+		
+# Session 처리
+1. 목적 : 로그인 후, DB 접속없이 
+	1) 각 화면에서 권한 check, 
+	2) 로그인 인증 이후에 처리할 내용 프로세스 처리.
+	3) 작성자나 특정 데이터를 session값으로 자동 입력 처리
+	
+2. 주요 코드 내용
+	1) 특정한 인증된 사용자에 대하여 해당 객체를 session값을 설정한다.
+		- 초기 로그인 화면 처리.
+	2) public String login(Member mem, HttpServletRequest request){
+			Member ckDB = service.chMember(mem);
+			if(ckDB!=null){
+				HttpSession session = request.getSession();
+				session.setAttribute("sesMem",ckDB);
+			}	
+	   }
+		@RequestMapping("logout.do")
+		public String logout(HttpServletRequest request){
+			HttpSession session = request.getSession();
+			session.invalidate();
+			return "redirect:/login.do");
+		}
+		
+	3) 각 화면에서 처리 내용
+		js
+		$("#logout").click(function(){
+			location.href="${path}/logout.do";
+		});
+		var sessId = "${sesMem.id}";
+		if(sessId==""){
+			alert("로그인이 필요합니다!\n로그인화면으로 이동");
+			location.href="${path}/login.do";
+		}
+		$("#uptBtn").click(function(){
+			var writer=$("[name=writer]").val();
+			if(sessId!=writer){
+				alert("작성자만이 수정가능합니다!");
+				return;
+			}
+		});
+		
+		등록시, 작성자는 session의 id로만 입력이 가능하게 처리.
+		<input name="writer" readonly value="${sesMem.id}"/>
+
+3. 게시판 적용
+	1) sql 확인
+		select * from member where id=#{id} and pass=#{pass}
+		select *
+		from member5
+		where id='himan' and pass=7777
+	2) dao/mapper작성
+		public Member login(Member mem);
+	3) service
+	4) controller에서 로그인 화면 및 session 처리
+	
 
 
 
