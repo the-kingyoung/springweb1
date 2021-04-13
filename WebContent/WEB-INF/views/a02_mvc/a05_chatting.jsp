@@ -49,14 +49,15 @@ $(document).ready(function(){
             // 채팅서버에 접속되었을 때, 처리할 내용..
             console.log(evt);
             // 접속메시지 전송
-            wsocket.send("msg:"+$("#id").val()+":연결 접속했습니다!");
+            wsocket.send($("#group").val()+":"+$("#id").val()+":연결 접속했습니다!");
          }
          // 2. 서버에서 메시지 받기.
          wsocket.onmessage=function(evt){
         	 var data = evt.data; // 메시지를 받음..
-        	 if(data.substring(0,4)=="msg:"){
+        	 var user = data.split(":")
+        	 if(user[0]==$("#group").val()){	// 현재그룹과 동일여부 철;
         		 //	메시지만 전달 처리..
-        		 revMsg(data.substring(4));
+        		 revMsg(user[1]+":"+user[2]);
         	 }
          };
          // 3. 서버에 종료 처리.
@@ -83,7 +84,7 @@ $(document).ready(function(){
    function sendMsg(){
 	   var id=$("id").val();
 	   var msg=$("#msg").val();
-	   wsocket.send("msg:"+id+":"+msg);   
+	   wsocket.send($("#group").val()+":"+id+":"+msg);   
 	   $("#msg").val("");
    }
    function revMsg(msg){

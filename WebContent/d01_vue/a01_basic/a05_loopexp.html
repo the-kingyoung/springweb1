@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/springweb/a00_com/bootstrap.min.css" >
+<script type="text/javascript" src="/springweb/a00_com/jquery-3.5.1.js"></script>
+<script src="/springweb/a00_com/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript">
+/* 
+
+*/
+//
+	$(document).ready(function(){
+		var vm = new Vue({
+			el:".container",
+			data:{
+				msg:"반복문 예제",
+				title:"연습",
+				rainbow:["red","orange","yellow","green","blue","navy","purple"],
+				book : {title:"삼국지",company:"대원", writer:"나관중",price:10000}
+			}
+		});      
+	});
+</script>
+</head>
+<body>
+<div class="container">
+	<div class="jumbotron text-center">
+		<h2>{{title}}</h2>
+	</div>
+	<h3 class="text-center">무지개</h3>
+	<h4 v-for="(color,idx) in rainbow" class="text-center">
+		{{color}}</h4>
+	<h4 v-for="(color,idx) in rainbow" 
+	:style="{backgroundColor:color}" class="text-center">
+		{{color}}</h4>
+		<!-- 	<h3 class="text-center">무지개</h3>
+	<h4 class="text-center" v-for="(color,idx) in rainbow">
+		<h2 style="text-color:'{{color}}'">{{idx+1}}번째 무지개색깔은{{color}}</h2>
+	</h4>
+	<h3 class="text-center">책</h3>
+	<table>
+		<tr class="text-center">
+			<th>제목</th>
+			<th>출판사</th>
+			<th>저자</th>
+			<th>가격</th>
+		</tr>
+		<tr v-for="(book,pro) in book" class="text-center">
+			<th v-text="pro"></th><td>{{book}}</td>
+		</tr>
+	</table> -->
+	
+	<table class="table table-hover table-striped">
+	<tbody>
+		<tr v-for="(val,pro) in book" class="text-center">
+			<th>{{pro}}</th><td>{{val}}</td>
+		</tr>
+	</tbody>
+	</table>    
+</div>
+</body>

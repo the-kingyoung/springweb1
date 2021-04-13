@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/springweb/a00_com/bootstrap.min.css" >
+<script type="text/javascript" src="/springweb/a00_com/jquery-3.5.1.js"></script>
+<script src="/springweb/a00_com/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript">
+/* 
+# 반복문 처리 v-for 디렉티브
+1. 여러가지 유형의 배열이나 객체 모델 데이터를 화면에 처리할 때,
+주로 사용되는 디렉티브이다.
+2. 반복할 요소객체를 출력 directive이다! 속성값을 표시하는
+directive와 함께 효과적으로 반복적인 내용을 수행할 수 있다.
+3. v-for 처리하는 배열데이터 유형.
+	1) 기본 단일 type의 배열 모델의 처리..
+		var fruits = ["사과","바나나","딸기"];
+			index		0		1		2
+		모델로 선언된 배열은..
+		<요소객체 v-for="(단위데이터변수, index) in 배열모델명">
+			{{index}}-{{단위데이터변수}}
+		형식으로 하여 해당 요소객체를 반복적으로 처리한다.
+		ex) <h3 v-for="(fruit,index) in fruits">
+				{{index+1}}번째 과일 : {{fruit}}
+			</h3>
+			
+	
+	2) 기본 단일 객체형 모델의 처리..
+		- 속성, 속성값의 단일 객체{}형식의 모델데이터를 for문으로 처리할 때, 
+		활용된다.
+		var person = {name:"홍길동",age:25,loc:"서울신림동"};
+		<요소객체 v-for="{속성값, 속성} in 모델객체">
+			{{속성}}-{{속성값}}
+		ex) <tr v-for="(val,pro) in person">
+				<td>{{pro}}</td><td>{{val}}</td>
+			</tr>
+			
+	3) 객체형 배열 모델의 처리.
+		- 배열 안에 구성요소가 객체가 있을 때, 처리하는 방식..
+		var list = [
+				{name:"홍길동", kor:80,eng:90,math:100},
+				{name:"홍길동", kor:90,eng:92,math:100},
+				{name:"홍길동", kor:85,eng:92,math:100}
+		];
+	// 반복시마다, 단위객체로 std에 받아서 처리할 수 있다.
+	var std = {name:"홍길동", kor:80,eng:90,math:100};
+	<요소객체 v-for="(단위객체, index) in 객체형배열모델"
+		{{단위객체.속성}}
+*/
+//
+	$(document).ready(function(){
+		var vm = new Vue({
+			el:".container",
+			data:{
+				title:"반복문 처리 v-for",
+				fruits:["사과","바나나","딸기"],
+				person:{name:"홍길동",age:25,loc:"서울 신림동"},
+				list:[
+					{name:"홍길동",kor:80,eng:90,math:100},
+					{name:"김길동",kor:80,eng:92,math:90},
+					{name:"신길동",kor:80,eng:92,math:80}
+				],
+				rainbow:["red","orange","yellow","green","blue","navy","purple"],
+				book : {title:"삼국지",company:"대원", writer:"나관중",price:10000}
+			}
+		});      
+	});
+</script>
+</head>
+<body>
+<div class="container">
+	<div class="jumbotron text-center">
+		<h2>{{title}}</h2>
+	</div>
+	<h3 class="text-center">과일</h3>
+	<h4 class="text-center" v-for="(fruit,idx) in fruits">
+		{{idx+1}}번째 과일 {{fruit}}
+	</h4>
+	<h3 class="text-center">사원 정보(단일 객체)</h3>	
+	<table class="table table-hover table-striped">
+	<tbody>
+		<tr v-for="(val,pro) in person" class="text-center">
+			<th v-text="pro"></th>
+			<td>{{val}}</td>
+		</tr>
+	</tbody>
+	</table>   
+	<h3 class="text-center">학생 성적</h3> 
+	<table class="table table-hover table-striped">
+	<thead>
+		<tr class="table-success text-center">
+			<th>번호</th>
+			<th>타이틀</th>
+			<th>국어</th>
+			<th>영어</th>
+			<th>수학</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr v-for="(stu,idx) in list" class="text-center">
+			<th v-text="idx+1"></th>
+			<td>{{stu.name}}</td>
+			<td>{{stu.kor}}</td>
+			<td>{{stu.eng}}</td>
+			<td>{{stu.math}}</td>
+		</tr>
+		<!-- 
+		1. 무지개 색상을 배열로 선언하고, 해당 색상으로 출력처리
+		2. 단위객체를 book
+			제목,출판사, 저자, 가격을 속성으로 설정하여 
+			테이블로 출력하세요
+		 -->
+	</tbody>
+	</table>    
+</div>
+</body>
