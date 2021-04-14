@@ -19,6 +19,14 @@ directive와 함께 효과적으로 반복적인 내용을 수행할 수 있다.
 		var fruits = ["사과","바나나","딸기"];
 			index		0		1		2
 		모델로 선언된 배열은..
+		js) for(var idx in fruits){
+				fruits[idx] : 사과,바나나,딸기			
+			}
+			$.each(fruit, function(idx,fruit,arry){
+				fruit : 사과, 바나나, 딸기.
+			});
+		
+		
 		<요소객체 v-for="(단위데이터변수, index) in 배열모델명">
 			{{index}}-{{단위데이터변수}}
 		형식으로 하여 해당 요소객체를 반복적으로 처리한다.
@@ -31,6 +39,11 @@ directive와 함께 효과적으로 반복적인 내용을 수행할 수 있다.
 		- 속성, 속성값의 단일 객체{}형식의 모델데이터를 for문으로 처리할 때, 
 		활용된다.
 		var person = {name:"홍길동",age:25,loc:"서울신림동"};
+		js
+		for(var pro in person){
+			person[pro] : pro - 속성, person[pro] - 속성값
+		}
+		
 		<요소객체 v-for="{속성값, 속성} in 모델객체">
 			{{속성}}-{{속성값}}
 		ex) <tr v-for="(val,pro) in person">
@@ -43,11 +56,18 @@ directive와 함께 효과적으로 반복적인 내용을 수행할 수 있다.
 				{name:"홍길동", kor:80,eng:90,math:100},
 				{name:"홍길동", kor:90,eng:92,math:100},
 				{name:"홍길동", kor:85,eng:92,math:100}
-		];
-	// 반복시마다, 단위객체로 std에 받아서 처리할 수 있다.
-	var std = {name:"홍길동", kor:80,eng:90,math:100};
-	<요소객체 v-for="(단위객체, index) in 객체형배열모델"
-		{{단위객체.속성}}
+			];
+		ex) for(var idx in list){
+				var stud = list[idx];
+				stud.name, stud.kor, stud.eng, stud.math
+				$.each(list, function(idx,stud,arr){
+					stud.name, stud.kor, stud.eng, stud.math
+				});
+			}
+		// 반복시마다, 단위객체로 std에 받아서 처리할 수 있다.
+		var std = {name:"홍길동", kor:80,eng:90,math:100};
+		<요소객체 v-for="(단위객체, index) in 객체형배열모델"
+			{{단위객체.속성}}
 */
 //
 	$(document).ready(function(){
