@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/springweb/a00_com/bootstrap.min.css" >
+<script type="text/javascript" src="/springweb/a00_com/jquery-3.5.1.js"></script>
+<script src="/springweb/a00_com/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+<script type="text/javascript">
+/* 
+ex) Vue로 사원명과 직책명으로 ajax를 통한
+사원 정보 처리..
+0. 환경설정..
+	lib 설정
+1. json 데이터 확인
+http://localhost:7080/springweb/jsonEmp.do?ename=A&job=A
+		
+2. Vue 객체 기본 선언
+	1) 모델데이터
+	2) 기능메서드
+3. 화면 구성
+	css, 조회 이벤트 처리
+4. 검색 기능 메서드 상세 구현
+
+*/
+//
+	$(document).ready(function(){
+		var vm = new Vue({
+			el:".container",
+			data:{
+				title:"사원정보검색",
+				ename:"",
+				job:"",
+				isProcessing:false,
+				empList:[]
+			},
+			methods:{
+				search:function(){
+					console.log("사원명:"+this.ename);
+					console.log("직책:"+this.job);
+					this.fetchEmps();
+				},
+				fetchEmps:_.debounce(function(){
+					var vm = this;
+					this.empList=[];
+					this.isProcessing=true;
+					var ename=this.ename.toUpperCase();
+					var job =this.job.toUpperCase();
+					
+					
+					var url = "http://localhost:7080/springweb/jsonEmp.do?ename="+ename+"&job="+job;
+					fetch(url).then(function(response){
+						console.log("# 서버에서 온 response 객체 #");
+						console.log(response)
+						return response.json();
+					}).then(function(json){
+						// response에 의해서 받은 json데이터만 처리.
+						console.log("# 서버에서 온 json 객체 #");
+						console.log(json);
+						vm.empList=json.emp;	// 서버에서 받은 json데이터를 모델에 할당처리.
+						vm.isProcessing=false; // 데이터 로딩 완료시, false
+						// this. 현재의 fetch() 객체 지정.
+						
+					}).catch(function(err){
+						// 기타 에러 발생시 처리 내용..
+						console.log("# 에러 발생 #");
+						console.log(err);
+						vm.isProcessing=false;
+					});
+					
+				},300)
+			}
+		});      
+	});
+</script>
+</head>
+<body>
+<div class="container">
+	<div class="jumbotron text-center">
+		<h2>{{title}}</h2>
+	</div>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<input class="form-control mr-sm-2" type="text" 
+			v-model="ename" @keyup.13="search"
+			placeholder="사원명">
+		<input class="form-control mr-sm-2" type="text" 
+			v-model="job" @keyup.13="search"
+			placeholder="직책명">
+		<button class="btn btn-success" type="button"
+			@click="search">Search</button>
+	</nav>
+	<table class="table table-hover table-striped">
+	<thead>
+		<tr class="table-success text-center">
+			<th>사원번호</th>
+			<th>사원명</th>
+			<th>직책</th>
+			<th>관리자번호</th>
+			<th>입사일</th>
+			<th>급여</th>
+			<th>보너스</th>
+			<th>부서번호</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr v-for="emp in empList" 
+			class="text-center">
+			<td>{{emp.empno}}</td>
+			<td>{{emp.ename}}</td>
+			<td>{{emp.job}}</td>
+			<td>{{emp.mgr}}</td>
+			<td>{{emp.hiredate}}</td>
+			<td>{{emp.sal}}</td>
+			<td>{{emp.comm}}</td>
+			<td>{{emp.deptno}}</td>
+		</tr>
+	</tbody>
+	</table>
+		<div id="schingDvi" v-show="isProcessing">
+		<img src="process.gif" width="200px"
+			height="150px"/>
+	</div>   
+</div>
+</body>

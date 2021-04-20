@@ -65,7 +65,11 @@ public class A07_Collection {
 			System.out.println(o);
 		}
 		// 요소객체가 Object이기에 Person객체를 typecasting 필요
-		
+		Person p02 = (Person)list.get(4);
+		System.out.println("타입 캐스팅 후, Person 객체 호출");
+		System.out.println(p02.getName());
+		System.out.println(p02.getAge());
+		System.out.println(p02.getLoc());
 		
 		// ex) list2로 ArrayList객체를 선언하고,
 		//		이름문자열, 배열객체, Double, Product 객체를 할당하고
@@ -94,7 +98,40 @@ public class A07_Collection {
 //		System.out.println(p01.getCnt());
 		// ex) list객체의 내용 typecasting하여 해당 속성값을 출력 처리하세요.
 		
-		
+/*
+# generic
+1. ArrayList나 default로 특정한 Object형 데이터를 받는 부분을
+초기에 데이터 유형을 <데이터유형>을 선언해 놓음으로 typecasting을 하지 않고도
+효과적으로 데이터를 처리할 수 있게 하는 것을 말한다.
+ */
+		// 정수형 객체만 들어올 수 있게 처리하는 generic선언.
+		ArrayList<Integer> intList = new ArrayList<Integer>();
+		intList.add(new Integer(30));
+		intList.add(40); 
+		// boxing처리 개념으로 가능함 Integer i = 25;
+		intList.add(70);
+		intList.add(50);
+		System.out.println("list된 데이터 확인");
+		for(int num:intList) {
+			// unboxing 개념으로 wrapper 클래스에 있는 데이터를
+			// 숫자형으로 할당 가능 int num01 = new Integer(25);
+			System.out.println(num);
+		}
+		// 객체형데이터..
+		ArrayList<Person> plist = new ArrayList<Person>();
+		plist.add(new Person("홍길동",25,"서울 방배동"));
+		plist.add(new Person("신길동",23,"서울 청담동"));
+		plist.add(new Person("마길동",22,"서울 신림동"));
+		plist.add(new Person("오길동",27,"서울 서초"));
+		// 특정한 위치에 있는 객체를 변경 처리..
+		plist.set(0, new Person("김현정",25,"경기 동탄"));
+		// Generic으로 인해 typecasting 필요없이 객체를 바로 활용할 수 있다.
+		for(Person p : plist) {
+			System.out.print(p.getName()+"\t");
+			System.out.print(p.getAge()+"\t");
+			System.out.print(p.getLoc()+"\n");
+			
+		}
 		
 		
 		

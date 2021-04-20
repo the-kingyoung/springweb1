@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/springweb/a00_com/bootstrap.min.css" >
+<script type="text/javascript" src="/springweb/a00_com/jquery-3.5.1.js"></script>
+<script src="/springweb/a00_com/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript">
+/* 
+# 여러가지형태의 vue 모델 객체와 style과 class 적용
+1. 속성을 model 데이터로 설정하면 json형태({속성:속성값,})
+2. 적용 패턴
+	1) :style="{css속성:모델데이터,...}"
+	2) :style="모델객체명"
+	3) :style="[모델객체명1,모델객체명2]"
+	4) :class="{선언된클래스1:true, 선언된클래스2:true}"
+	5) :class="모델객체명"
+	6) :class="[클래스모델객체1, 클래스모델객체2]"
+3. checkbox를 v-model을 통한 모델 속성 변경으로 통한 동적인 css 처리.
+	기능메서드 없이도 처리가 가능.. v-model이 양방향 모델 데이터 처리를 해주기에
+	가능하다.
+	1) <input type="checkbox" value="데이터값"/>
+		checked가 되었을 때만, 데이터값의 value로 적용된다.
+*/
+//
+	$(document).ready(function(){
+		var vm = new Vue({
+			el:".container",
+			data:{
+				title:"style과 모델설정",
+				fntColor:'blue',
+				style1:{color:'yellow',backgroundColor:'tomato'},
+				style2:{border:'3px solid green'},
+				ck01:false,
+				ck02:true,
+				clsObj1:{cls1:true},
+				clsObj2:{cls2:false}
+			}
+		});      
+	});
+</script>
+<style type="text/css">
+	.cls1{color:red; background-color:orange;}
+	.cls2{border:3px double blue;}
+</style>
+</head>
+<body>
+<div class="container">
+	<div class="jumbotron text-center">
+		<h2>{{title}}</h2>
+		<h3 :style="{color:fntColor}">글자색상 style 적용(모델데이터의 속성)</h3>
+		<h4 :style="style1">속성/속성값 모델 호출</h4>
+		<h4 :style="[style1,style2]">여러가지 모델 객체 적용</h4>
+		<h4 :class="{cls1:ck01,cls2:ck02}">
+				클래스 적용 여부 속성 모델 호출</h4>
+		<h4 :class="clsObj1">
+				클래스를 선언한 모델 설정</h4>
+		<h4 :class="[clsObj1, clsObj2]">
+				여러개의 클래스 선언 모델 호출</h4>
+	</div>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<input class="form-control mr-sm-2" type="checkbox" 
+			value="true" v-model="ck01">클래스1적용
+		<input class="form-control mr-sm-2" type="checkbox" 
+			value="true" v-model="ck02">클래스2적용
+	</nav>
+	<table class="table table-hover table-striped">
+	<thead>
+		<tr class="table-success text-center">
+			<th>타이틀</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="text-center">
+			<td>내용</td>
+		</tr>
+	</tbody>
+	</table>    
+</div>
+</body>

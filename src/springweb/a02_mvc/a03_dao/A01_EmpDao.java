@@ -13,7 +13,7 @@ import springweb.z02_vo.Emp;
 // (Emp sch) : resultType
 import springweb.z02_vo.Emp2;
 import springweb.z03_vo.EmpDept;
-
+//springweb.a02_mvc.a03_dao..*(..)
 @Repository
 public interface A01_EmpDao {
 	// 여기에 있는 구성요소 하나 하나가 EmpMapper.xml에 있는 구성요소와 연동하여

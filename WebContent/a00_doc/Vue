@@ -39,13 +39,27 @@
 			디렉티브를 통한 데이터 선언(model-json형으로 선언)
 			{{변수명}} v-text="변수명" v-html="변수명"
 		함수처리
-			computed, methods, watch, 라이프사이클메서드
+			computed(캐시메모리), methods(일반기능메서드), watch(모델데이터변경시처리), 
+			라이프사이클메서드(화면 로딩/소멸의 시점에 따른 기능 처리)
 	3) 조건/반복문
 		- js
 			if, for, forEach...
 		- vue
+			v-if는 해당 조건일 때만 요소객체가 출력
 			<요소객체 v-if="모델데이터의조건">
 			<요소객체 v-for="(단위객체, index) in 배열형데이터">
+			<요소객체 v-else>
+			v-show="조건" v-if와 비슷하나, v-if는 객체자체를
+				랜더링하지 않으나, v-show는 일단 랜더링 후,
+				visibility 속성으로 보이거나 보이지 않게 처리할 때,
+				사용한다.
+			
+			v-for는 화면에서 반복적인 요소객체 출력시 사용
+				cf) for(var 변수 in 배열/객체)
+			<요소객체 v-for="(속성값, 속성) in 객체형">
+			
+			<요소객체 v-for="(단위객체, index) in 배열형 데이터">
+			
 		
 	
 2. DOM활용
@@ -60,8 +74,15 @@
 		화면에서 바로 구성요소에 directive를 활용해서 처리 모델데이터와 
 		연동하여 처리한다. {{모델데이터}} v-text="모델데이터"
 		v-bind : 속성="모델데이터"
-		동적인 DOM mapping 처리 : v-model(입력하는 form하위객체와 model데이터
+		동적인 DOM mapping 처리 : 
+			v-model(입력하는 form하위객체와 model데이터
 			와 쌍방향으로 데이터 처리)
+			data:{num01:''}
+			
+			<input v-model="num01"/>
+			
+			{{num01}}
+			
 		사용자 정의 DOM객체를 선언하여, 계층 구조화된 Component를 활용한다.
 		컴포넌트 선언
 			<template id="empSch">
@@ -94,7 +115,9 @@
 			}
 		<요소객체 v-on : 이벤트명="함수명">
 		<요소객체 @이벤트명="핸들러함수명">
-		ex) <input type="button" v-on:click="call"/>
+		ex) 
+		<input type="button" v-on:click="call"/>
+		<input type="button" @click="call"/>
 4. style을 통한 화면처리 및 동적 변경
 	1) html/css/js
 		<h3 class="클래스명">
@@ -106,6 +129,18 @@
 			#주의 vue에서는 json형태로 해당 클래스의 적용 여부를 boolean으로
 			선언할 수 있고, 클래스와 적용여부를 model데이터를 선언하여,
 			동적인 처리를 할 수 있다.
+			ex) .bkRed{background-color:red;color:yellow;}
+			<h3 :class="{bkRed:true}"> : 클래스가 적용 처리된다.
+			<h3 :class="{bkRed:false}"> : 클래스가 적용 처리되지 않는다.
+			
+			data:{isBkRed:true}
+			<h3 :class="{bkRed:isBkRed}">
+			이벤트나 v-model을 통해서 동적으로 모델데이터를 변경함으로
+			해당 클래스가 적용/미적용이 처리될 수 있다.
+			
+			
+			
+			
 		<h2 :style="{backgroundColor:모델속성,color:모델속성...}">
 			backgroundColor : 구분자를 대문자로 선언하는 변수 방식을
 				camelcase
@@ -123,6 +158,7 @@
 		lifeCycle 메서드인 created를 통해서 모델데이터를 할당해줌으로
 		화면에 구성된 directive 데이터를 출력 처리할 수 있다.
 		var vm = new Vue({
+			el:선택자,
 			data:{모델데이터...},
 			methods:{
 				list:function(){

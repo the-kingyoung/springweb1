@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	.sch{width:25%;}
+	#schingDvi{
+		position:absolute;top:20%;left:40%;
+		width:150px;height:103px;
+	}
+	[v-cloak]{display:none;}
+	/*directive 랜더링 완료시까지 보이지 않게 처리*/
+</style>
+<link rel="stylesheet" href="/springweb/a00_com/bootstrap.min.css" >
+<script type="text/javascript" src="/springweb/a00_com/jquery-3.5.1.js"></script>
+<script src="/springweb/a00_com/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+
+
+
+
+<script type="text/javascript">
+/* 
+# 공공 json데이터를 통한 ajax처리(검색list)..
+
+0. 개요
+	지금까지 배운 directive와 이벤트, 핸들러 처리를 통해,
+	공공의 list json 데이터를 검색 처리하고자 한다.
+	- 주요 기술 내용.
+		fetch api를 통한 ajax로 요청값을 통한 json데이터 로딩하기
+			검색내용과 검색이벤트 핸들러 호출 처리
+			가져온 json 객체형 배열 데이터를 v-for문을 통해 출력 list처리.
+			여러가지 directive를 활용하여 동적인 처리.
+	- 사용할 lib 프로그램..
+		https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js
+		https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js    
+		https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js
+1. 처리 순서
+	1) 공공 json site 인터페이스 확인(서버)
+		http://sample.bmaster.kro.kr
+	2) 기본 데이터 구성 확인(단위 객체 json 형식)
+		contacts 단위 객체
+		{"no":1592030163205,"name":"Keandra Morris",
+		"tel":"010-3456-8299","address":"서울시",
+		"photo":"http://sample.bmaster.kro.kr/photos/100.jpg"}
+	3) 화면 처리 UI
+		- 검색 : 이름으로 keyword 검색 처리.
+			이름[       ]
+		- 리스트 테이블 구성.
+			번호		이름		전화번호		주소		이미지
+			no		name	tel		address		photo
+			
+	4) 검색 요청 url확인
+		전체 데이터 : http://sample.bmaster.kro.kr/contacts
+		한건당 no검색 : http://sample.bmaster.kro.kr/contacts/1592030163205
+		이름으로 검색 : http://sample.bmaster.kro.kr/contacts/search/jo
+	5) 주요 lib의 기능 확인
+		underscore.js : _.debound(함수, 1/1000초) : 비동기 요청값 처리시,
+			이중 입력을 방지, 부하개선
+			ex) _.debound(function(){
+					해당 시간안에 두 세번 처리하더라도 한번만 처리하게 한다.
+					ajax통한  keyup등 빠른 이벤트의 서버부하 감소.
+				}, 1/1000);
+			
+		fetch.js : ajax를 통한 효과적인 비동기 처리.
+			ex) fetch(url).then(function(){
+					response.json():서버에서 받은 json 데이터
+					모델 데이터에 할당하여 화면에 적용 처리..
+				})
+		s6-promise.auto.min.js :
+				함수1(매개) : 처리결과 return, 함수2(매개):처리,
+					처리결과, 함수3(매개): 처리
+				함수(초기매개변수).then(함수1).then(함수2);
+				function(){}function(){}
+		
+				
+	6) Vue 인스턴스에 모델 데이터,
+		모델 데이터 : 검색이름, 검색중인지 여부에 따른 상태, 검색리스트
+		함수 선언. : search : 검색이름이 2자 이상일 때, 처리...
+					fetchContacts() 검색된 내용을 처리.
+		기본 데이터 구성과 연동하여 함수 선언.
+	7) 검색된 내용 v-for 구문을 통해서 처리.
+		기타 인터페이스 확인
+	8) 테스트
+# 개발 순서
+1. vue인스턴스 객체에서 사용할 모델 객체, 기능 메서드 함수명 선언.
+2. 화면 구현
+	검색데이터, 리스트 화면 내용 선언.
+	이벤트 처리할당.
+3. 검색처리되는 기능 메서드 구체적인 내용 처리.
+	1) filtering : 요청값 2글자 이상일 때,
+	2) ajax를 통한 모델데이터 연동 처리.
+	3) 기타 유효성 체크
+	4) 화면 확인.
+	
+
+
+*/
+//
+	$(document).ready(function(){
+		var vm = new Vue({
+			el:".container",
+			data:{
+				title:"회원 검색",
+				name:"",	//검색할 이름
+				isProcessing:false, //	검색중인지 여부를 처리
+				contactlist:[]	//	검색된 리스트 데이터-ajax를 통해 받은 데이터
+			},
+			methods:{
+				search:function(){
+					console.log("검색이름:"+this.name);
+					if(this.name.length<2){
+						alert("검색은 두 자 이상\n입력하여야 합니다.");
+					}else{
+						//ajax 처리하는 함수 호출.
+						this.fetchContacts();
+					}
+				},	//	검색키워드 클릭시 이벤트
+				fetchContacts:_.debounce(function(){
+					// this. 현재의 Vue()객체..
+					// vm이라는 변수를 통해서 Vue()객체가 가지고 있는
+					// 모델데이터, 기능메서드를 활용을 위해서 선언한다.
+					var vm = this; 
+					// Vue() 객체를 하위 메서드에서 사용하기 위해서 변수 지정.
+					// 1. 모델데이터 초기화
+					this.contactlist=[];	// 리스트할 모델데이터
+					this.isProcessing=true;	// 저장 프로세스(조회중 표시)
+					
+					// 2. fetch api의 ajax처리와 promise형태 함수 처리.
+					var url = "http://sample.bmaster.kro.kr/contacts/search/"+this.name;
+					fetch(url).then(function(response){
+						console.log("# 서버에서 온 response 객체 #");
+						console.log(response)
+						return response.json();
+					}).then(function(json){
+						// response에 의해서 받은 json데이터만 처리.
+						console.log("# 서버에서 온 json 객체 #");
+						console.log(json);
+						// 모델데이터 할당
+						vm.contactlist=json;	// 서버에서 받은 json데이터를 모델에 할당처리.
+						vm.isProcessing=false; // 데이터 로딩 완료시, false
+						// this. 현재의 fetch() 객체 지정.
+						
+					}).catch(function(err){
+						// 기타 에러 발생시 처리 내용..
+						console.log("# 에러 발생 #");
+						console.log(err);
+						vm.isProcessing=false;
+					});
+				
+				},300)	//	ajax 처리 내용
+			}
+		});      
+	});
+</script>
+</head>
+<body>
+<div class="container">
+	<div class="jumbotron text-center">
+		<h2>{{title}}</h2>
+	</div>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<!-- 
+		:v-on:keyup.키코드값일때..
+		해당 키코드값 13 즉, enter키를 입력했을 때, 호출할 이벤트핸들러 함수
+		선언..
+		form 태그 삭제
+		 -->
+		<input class="form-control mr-sm-2 sch" type="text" 
+			v-model="name" @keyup.13="search"
+			placeholder="이름입력">
+			
+		<button class="btn btn-success" type="button"
+			@click="search">Search</button>
+	</nav>
+	<table class="table table-hover table-striped">
+	<thead>
+		<tr class="table-success text-center">
+			<th>번호</th>
+			<th>이름</th>
+			<th>전화번호</th>
+			<th>주소</th>
+			<th>이미지</th>
+		</tr>
+	</thead>
+	<tbody>
+		<!-- 모델데이터의 반복문 처리.. -->
+		<tr v-for="contact in contactlist" 
+			class="text-center">
+			<td>{{contact.no}}</td>
+			<td>{{contact.name}}</td>
+			<td>{{contact.tel}}</td>
+			<td>{{contact.address}}</td>
+			<td><img :src="contact.photo" 
+				width="100px" height="100px"/></td>
+		</tr>
+	</tbody>
+	</table>
+	<div id="schingDvi" v-show="isProcessing">
+		<img src="process.gif" width="200px"
+			height="150px"/>
+	</div>
+</div>
+</body>

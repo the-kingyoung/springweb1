@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd     
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/websocket
+		http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+	<!-- 
+# AOP프로그램 처리
+1. 대상이 되는 target 클래스 선언..
+2. 관심모듈(AOP) 클래스 선언
+3. Proxy 클래스 선언.
+4. Advisor(pointcut + advice) 처리..
+	 -->
+	 <!-- 1. 대상클래스 -->
+	 <bean id="messgeImpl" class="springaop.z01_vo.Message">
+	 	<property name="name">
+	 		<value>홍길동</value>
+	 	</property>
+	 </bean>
+	 <!-- 2. 관심모듈(AOP)클래스 선언:해당 대상객체가 수행될 때, 처리할 내용 -->
+	 <bean id="logging" class="springaop.z01_vo.Logging"/>
+	 <!-- 3. Advisor = pointcut(시점)  + advice(처리할내용) -->
+	 <bean id="advisor" 
+	 class="org.springframework.aop.support.DefaultPointcutAdvisor">
+	 	<!-- 1) 시점을 지정 -->
+	 	<property name="pointcut">
+	 		<bean class="org.springframework.aop.support.JdkRegexpMethodPointcut">
+	 			<property name="pattern">
+	 				<value>.*.helloApp</value> 
+	 				<!-- helloApp메서드가 수행될때.. -->
+	 			</property>
+	 		</bean>
+	 	</property>
+	 	<!-- 2) 해당 시점이 수행될 때, 처리할 내용 -->
+	 	<property name="advice" ref="logging"/>
+	 </bean>
+	 	 
+	 <!-- 4. Proxy 클래스 선언 -->
+	 <bean id="proxy"
+	 class="org.springframework.aop.framework.ProxyFactoryBean">
+	 	<!-- 대상 지정 -->
+	 	<property name="target">
+	 		<ref bean="messgeImpl"/>
+	 	</property>
+	 	<!-- advisor선언 -->
+	 	<property name="interceptorNames">
+	 		<list>
+	 			<value>advisor</value>
+	 		</list>
+	 	</property>
+	 </bean>
+	 
+	 
+</beans>      
