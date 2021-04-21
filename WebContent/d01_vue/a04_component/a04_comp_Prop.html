@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/springweb/a00_com/bootstrap.min.css" >
+<script type="text/javascript" src="/springweb/a00_com/jquery-3.5.1.js"></script>
+<script src="/springweb/a00_com/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript">
+/* 
+# 컴포넌트의 기능메서드 / 모델 데이터
+1. 컴포넌트에서 사용하는 모델데이터는
+	data:function(){return 모델객체} 형태로 사용할 수 있다.
+2. 컴포넌트에서 메서드의 사용
+	methods:{함수명:function(){}}
+*/
+// ex) cal-comp 선언하고 @@ + @@ = @@로 모델데이터를 출력하세요.
+	$(document).ready(function(){
+		Vue.component('comp',{
+			template:`
+						<div>
+							<h2>{{greet}}</h2>
+						<div>
+					`,
+			data:function(){
+				return {greet:"안녕하세요(컴포넌트 모델데이터)"};
+			}
+		})
+		Vue.component('cal-comp',{
+			template:`
+						<div>
+							<h2>{{num01}}+{{num02}}={{num01+num02}}</h2>
+						</div>
+					`,
+			data:function(){
+				return {num01:1, num02:2};
+			}
+		})
+		Vue.component("time-comp",{
+			template:`<div>
+						<span>{{nowTS}}</span><br>
+						<button v-on:click="timeClick">현재시간</button>
+					  <div>
+					 `,
+			data:function(){
+				return {nowTS:0}
+			},
+			methods:{
+				timeClick:function(){
+					this.nowTS=(new Date()).toLocaleString();
+				}
+			}
+		})
+		// ex) prod-comp 으로 물건가격:[	] 갯수:[	] @@@원	[총계]
+		//		총계를 클릭시, 총 금액을 출력 처리하세요.
+		Vue.component("prod-comp",{
+			template:`<div>
+						물건가격:<input type="text" size="3" v-model="price">
+						갯수:<input type="text" size="3" v-model="cnt">
+						<span>총계:{{total}}원 </span>
+						<button v-on:click="countClick">총계</button>
+					  <div>
+					 `,
+			data:function(){
+				return {price:0, cnt:0, total:0}
+			},
+			methods:{
+				countClick:function(){
+					this.total=this.price*this.cnt;
+				}
+			}
+		})
+		// ex) 컴포넌트 count-comp	0	[카운트업] [카운트다운]
+		Vue.component("count-comp",{
+			template:	`<div>
+							카운트:{{num}}
+				<button v-on:click="countUp">카운트업</button>
+				<button v-on:click="countDown">카운트다운</button>
+						 <div>
+						 `,
+			data:function(){
+				return {num:0};
+			},
+			methods:{
+				countUp:function(){
+					this.num+=1;
+				},
+				countDown:function(){
+					this.num-=1;
+				}
+			}
+			
+
+		})
+		var vm = new Vue({
+			el:".container",
+			data:{
+				title:"컴포넌트 구성요소 활용 연습"
+			}
+		});      
+	});
+</script>
+</head>
+<body>
+<div class="container">
+	<div class="jumbotron text-center">
+		<h2>{{title}}</h2>
+		<comp></comp>
+		<cal-comp></cal-comp>
+		<time-comp></time-comp>
+		<time-comp></time-comp>
+		<time-comp></time-comp>
+		<prod-comp></prod-comp>
+		<count-comp></count-comp>
+	</div>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+	<form class="form-inline" method="post">
+		<input class="form-control mr-sm-2" type="text" 
+			name="ename" value=""
+			placeholder="사원명">
+		<input class="form-control mr-sm-2" type="text" 
+			name="job"  value=""
+			placeholder="직책명">
+		<button class="btn btn-success" type="submit">Search</button>
+	</form>
+	</nav>
+	<table class="table table-hover table-striped">
+	<thead>
+		<tr class="table-success text-center">
+			<th>타이틀</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="text-center">
+			<td>내용</td>
+		</tr>
+	</tbody>
+	</table>    
+</div>
+</body>
