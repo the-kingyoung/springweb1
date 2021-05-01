@@ -14,12 +14,13 @@ public class Product implements Cloneable {
 	@Override
 	public Product clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
-		Product cloned = (Product)super.clone();
-		cloned.name = new String(this.name);
-		cloned.price = this.price;
-		cloned.cnt = this.cnt;
-		
-		return cloned;
+		Product p = null;
+		try {
+			p = (Product) super.clone();
+		}catch(CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return p;
 	}
 
 

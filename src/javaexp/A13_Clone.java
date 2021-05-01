@@ -76,7 +76,13 @@ public class A13_Clone {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+//		Product prod1 = new Product("사과", 3000,3);
+//		Product prod2 = prod1;
+//		Product prod3 = prod1.clone();
+//		prod1.setName("오렌지");
+//		System.out.println("prod1.getName() : "+prod1.getName());
+//		System.out.println("prod2.getName() : "+prod2.getName());
+//		System.out.println("prod3.getName() : "+prod3.getName());
 		
 		
 		
